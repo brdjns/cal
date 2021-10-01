@@ -32,12 +32,12 @@ public:
  */
 class Token_stream {
 public:
-    Token_stream();   // Constructor sets buffer to empty.
+    Token_stream(); // Constructor sets buffer to empty.
     Token get();
     void putback(Token t);
 
 private:
-    bool full;    // True when the token buffer is empty
+    bool full;    // True when the token buffer is full
     Token buffer; // A token buffer
 };
 
@@ -68,6 +68,11 @@ void Token_stream::putback(Token t)
   */
 Token Token_stream::get()
 {
+    if (full) {
+        full = false;
+        return buffer;
+    }
+
     char ch;
     std::cin >> ch;
 
@@ -113,19 +118,19 @@ double expression();
  */
 double primary()
 {
-    Token next_token = ts.get();
+    Token t = ts.get();
 
-    switch (next_token.kind) {
+    switch (t.kind) {
     case '(': {
-        double expr = expression();
-        next_token = ts.get();
-        if (next_token.kind != ')') {
+        double d = expression();
+        t = ts.get();
+        if (t.kind != ')') {
             throw std::runtime_error("')' expected");
         }
-        return expr;
+        return d;
     }
     case '8':
-        return next_token.value;
+        return t.value;
     default:
         throw std::runtime_error("primary expected");
     }
@@ -140,24 +145,27 @@ double primary()
 double term()
 {
     double left = primary();
-    Token next_token = ts.get();
+    Token t = ts.get();
 
-    switch (next_token.kind) {
-    case '*':
-        left *= primary();
-        next_token = ts.get();
-        break;
-    case '/': {
-        double expr = primary();
-        if (expr == 0) {
-            throw std::runtime_error("division by zero");
-            left /= expr;
-            next_token = ts.get();
+    while (true) {
+        switch (t.kind) {
+        case '*':
+            left *= primary();
+            t = ts.get();
             break;
+        case '/': {
+            double d = primary();
+            if (d == 0) {
+                throw std::runtime_error("division by zero");
+                left /= d;
+                t = ts.get();
+                break;
+            }
         }
-    }
-    default:
-        return left;
+        default:
+            ts.putback(t);
+            return left;
+        }
     }
 }
 
@@ -182,6 +190,7 @@ double expression()
             t = ts.get();
             break;
         default:
+            ts.putback(t);
             return left;
         }
     }
