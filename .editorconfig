@@ -1,0 +1,24 @@
+# .editorconfig: Cross-editor format file. -*- mode: editorconfig; -*-
+# Copyright (c) 2021 B. M. Jones
+
+# This file is part of Cal.
+
+# Top-most EditorConfig file
+root = true
+
+# Newline format
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Default character set
+[*.{c,cc,cpp,h,hpp,lua,java,js,json,py}]
+charset = utf-8
+
+# Indentation
+[*.{c,cc,cpp,py,js}]
+indent_style = space
+indent_size = 4
+
+[{Makefile,makefile}]
+indent_style = tab

@@ -1,0 +1,40 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: cl.exe build active file",
+			"command": "cl.exe",
+			"args": [
+				"/fsanitize=address",
+				"/external:W0",
+				"/external:I",
+				"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\include",
+				"/Za",
+				"/Zc:inline",
+				"/Zc:forScope",
+				"/Zc:wchar_t",
+				"/Zc:rvalueCast",
+				"/ZI",
+				"/W4",
+				"/EHsc",
+				"/nologo",
+				"/permissive-",
+				"/Fe:",
+				"${fileDirname}\\${fileBasenameNoExtension}.exe",
+				"${file}"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: cl.exe"
+		},
+	]
+}

@@ -1,0 +1,150 @@
+# .gitignore: Repository files to ignore.  -*- mode: gitignore; -*-
+# Copyright (c) 2020-2021 B. M. Jones
+
+# This file is part of Cal.
+
+# Assembler
+*.[Ss]
+*.asm
+
+# Backups
+*.bak
+*\#
+*~
+.\#*
+.netrwhist
+Session.vim
+!*.svg
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]s[a-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+[._]*.un~
+\#*\#
+
+# Build files
+_deps
+*.cache/
+*.cbp
+*.o.json
+*.plist
+CMakeCache.txt
+CMakeFiles/
+CMakeLists.txt
+CMakeLists.txt.user
+CMakeScripts
+CTestTestfile.cmake
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+Makefile
+build.ninja
+cmake-build-debug
+cmake_install.cmake
+compile_commands.json
+install_manifest.txt
+meson.build
+
+# Debug files
+*.idb
+*.pdb
+*.dSYM/
+
+# Development
+out.txt
+*.ede
+*.sln
+*.vcxproj.*
+.vs
+GPATH
+GTAGS
+TAGS
+cscope.files
+lib/
+out/
+t/
+tags
+test/
+
+# Directories
+bin/
+build/
+etc/
+lib/
+
+# Documentation
+*.1
+*.html
+*.ms
+*.org
+*.ps
+*.txt
+
+# Dynamic libraries
+*.dll
+*.dylib
+*.so
+*.so.*
+
+# Executables
+*.app
+*.exe
+*.hex
+*.i*86
+*.out
+*.x86_64
+
+# Linker files
+*.ilk
+*.map
+*.exp
+
+# Miscellaneous
+*.log
+
+# Object files
+*.elf
+*.ko
+*.lo
+*.o
+*.obj
+*.slo
+
+# OS files
+.DS_Store
+.Trash-*
+.directory
+Thumbs.db
+._*
+
+# Package management files
+conan.lock
+conanbuildinfo.*
+conaninfo.txt
+graph_info.json
+
+# Static libraries
+*.a
+*.la
+*.lai
+*.lib
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+

@@ -1,0 +1,14 @@
+# .gitattributes: Git file settings. -*- mode: gitattributes; -*-
+# Copyright (c) 2021 B. M. Jones
+
+# This file is part of Cal.
+
+
+# Normalise line endings.
+* text=auto
+
+# Treat files as binary.
+#*.jpg   binary
+#*.png   binary
+#*.gif   binary
+#*.pdf	 binary
