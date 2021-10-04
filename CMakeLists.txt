@@ -1,4 +1,4 @@
-# .gitattributes: Git file settings. -*- mode: gitattributes; -*-
+# CMakeLists.txt: CMake project settings for Cal.
 # This file is part of Cal.
 
 # Copyright (c) 2021 B. M. Jones.
@@ -21,12 +21,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+cmake_minimum_required (VERSION 3.8)
 
-# Normalise line endings.
-* text=auto
+project ("cal")
 
-# Treat files as binary.
-#*.jpg   binary
-#*.png   binary
-#*.gif   binary
-#*.pdf	 binary
+# Add source to this project's executable.
+add_executable (cal "src/cal.cc" "src/cal.h")
+
+# TODO: Add tests and install targets if needed.
+install (TARGETS cal DESTINATION "cal/bin")
