@@ -25,7 +25,7 @@
 
 ///  expression ::= term | expression '+' term | expression '-' term.
 ///  term       ::= primary | term '*' primary | term '/' primary.
-///  primary    ::= number | '(' expression ')'.
+///  primary    ::= number | '(' expression ')' | '{' expression '}'.
 ///  number     ::= floating-point-literal.
 
 /// @class Token
@@ -104,6 +104,8 @@ Token Token_stream::get()
     case 'q': // quit
     case '(':
     case ')':
+    case '{':
+    case '}':
     case '*':
     case '/':
     case '+':
@@ -142,6 +144,7 @@ double primary()
     Token t = ts.get();
 
     switch (t.kind) {
+    // Brackets.
     case '(': {
         double d = expression();
         t = ts.get();
@@ -150,6 +153,16 @@ double primary()
         }
         return d;
     }
+    // Braces.
+    case '{': {
+        double d = expression();
+        t = ts.get();
+        if (t.kind != '}') {
+            throw std::runtime_error("'}' expected");
+        }
+        return d;
+    }
+    // Numbers.
     case '8':
         return t.value;
     default:
