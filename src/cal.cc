@@ -33,8 +33,8 @@
 /// @details Represents a token that has a kind and a value.
 class Token {
 public:
-    char   kind;    // a token kind
-    double value;   // a token value
+    char kind;    // a token kind
+    double value; // a token value
 
     /// @brief Construct a token from a character.
     /// @param[in] ch a kind
@@ -51,7 +51,6 @@ public:
 /// @details Converts characters into tokens.
 class Token_stream {
 public:
-
     /// @brief Construct a stream of tokens that reads from the standard input.
     Token_stream();
 
@@ -177,10 +176,10 @@ double term()
             double d = primary();
             if (d == 0) {
                 throw std::runtime_error("division by zero");
-                left /= d;
-                t = ts.get();
-                break;
             }
+            left /= d;
+            t = ts.get();
+            break;
         }
         default:
             ts.putback(t);
