@@ -141,12 +141,12 @@ double expression();
 /// @throws runtime_error if next token is not an expression.
 double primary()
 {
-    Token t = ts.get();
+    Token t {ts.get()};
 
     switch (t.kind) {
     // Brackets.
     case '(': {
-        double d = expression();
+        double d {expression()};
         t = ts.get();
         if (t.kind != ')') {
             throw std::runtime_error("')' expected");
@@ -155,7 +155,7 @@ double primary()
     }
     // Braces.
     case '{': {
-        double d = expression();
+        double d {expression()};
         t = ts.get();
         if (t.kind != '}') {
             throw std::runtime_error("'}' expected");
@@ -176,8 +176,8 @@ double primary()
 /// @throws runtime_error for division by zero.
 double term()
 {
-    double left = primary();
-    Token t = ts.get();
+    double left {primary()};
+    Token t {ts.get()};
 
     while (true) {
         switch (t.kind) {
@@ -186,7 +186,7 @@ double term()
             t = ts.get();
             break;
         case '/': {
-            double d = primary();
+            double d {primary()};
             if (d == 0) {
                 throw std::runtime_error("division by zero");
             }
@@ -206,8 +206,8 @@ double term()
 /// @post Return an expression.
 double expression()
 {
-    double left = term();
-    Token t = ts.get();
+    double left {term()};
+    Token t {ts.get()};
 
     while (true) {
         switch (t.kind) {
@@ -228,7 +228,7 @@ double expression()
 
 int main()
 try {
-    double val = 0;
+    double val {};
 
     while (std::cin) {
         Token t = ts.get();
