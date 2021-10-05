@@ -85,6 +85,8 @@ out.txt
 *.sln
 *.vcxproj.*
 .vs
+.vscode
+CppProperties.json
 GPATH
 GTAGS
 TAGS

@@ -24,8 +24,8 @@
 #include "cal.h"
 
 ///  expression ::= term | expression '+' term | expression '-' term.
-///  term       ::= primary | term '*' primary | term '/' primary.
-///  primary    ::= number | '(' expression ')' | '{' expression '}'.
+///  term       ::= factor | term '*' factor | term '/' factor.
+///  factor    ::= number | '(' expression ')' | '{' expression '}'.
 ///  number     ::= floating-point-literal.
 
 /// @class Token
@@ -38,12 +38,12 @@ public:
 
     /// @brief Construct a token from a character.
     /// @param[in] ch a kind
-    Token(char ch) : kind {ch}, value {0} {}
+    Token(char ch) : kind{ch}, value{0} {}
 
     /// @brief Construct a token from a character and value.
     /// @param[in] ch a kind
     /// @param[in] val a value
-    Token(char ch, double val) : kind {ch}, value {val} {}
+    Token(char ch, double val) : kind{ch}, value{val} {}
 };
 
 /// @class Token_stream
@@ -67,10 +67,8 @@ private:
 };
 
 // Constructor sets buffer to empty.
-Token_stream::Token_stream() : full {false}, buffer {0}
-{
-    //
-}
+Token_stream::Token_stream() : full{false}, buffer{0}
+{}
 
 /// @brief Put a token back into the token stream.
 /// @param t A token
@@ -110,7 +108,7 @@ Token Token_stream::get()
     case '/':
     case '+':
     case '-':
-        return Token {ch};
+        return Token{ch};
     case '.':
     case '0':
     case '1':
@@ -121,11 +119,12 @@ Token Token_stream::get()
     case '6':
     case '7':
     case '8':
-    case '9': {
+    case '9':
+    {
         std::cin.putback(ch);
-        double val {};
+        double val{};
         std::cin >> val;
-        return Token {'8', val};
+        return Token{'8', val};
     }
     default:
         throw std::runtime_error("bad token");
@@ -135,18 +134,19 @@ Token Token_stream::get()
 Token_stream ts;
 double expression();
 
-/// @brief Construct a primary.
+/// @brief Construct a factor.
 /// @pre A token that is a number or parentheses.
-/// @post Return a primary.
+/// @post Return a factor.
 /// @throws runtime_error if next token is not an expression.
-double primary()
+double factor()
 {
-    Token t {ts.get()};
+    Token t{ts.get()};
 
     switch (t.kind) {
     // Brackets.
-    case '(': {
-        double d {expression()};
+    case '(':
+    {
+        double d{expression()};
         t = ts.get();
         if (t.kind != ')') {
             throw std::runtime_error("')' expected");
@@ -154,8 +154,9 @@ double primary()
         return d;
     }
     // Braces.
-    case '{': {
-        double d {expression()};
+    case '{':
+    {
+        double d{expression()};
         t = ts.get();
         if (t.kind != '}') {
             throw std::runtime_error("'}' expected");
@@ -166,27 +167,28 @@ double primary()
     case '8':
         return t.value;
     default:
-        throw std::runtime_error("primary expected");
+        throw std::runtime_error("factor expected");
     }
 }
 
 /// @brief Construct a term.
-/// @pre A primary.
+/// @pre A factor.
 /// @post Return a term.
 /// @throws runtime_error for division by zero.
 double term()
 {
-    double left {primary()};
-    Token t {ts.get()};
+    double left{factor()};
+    Token t{ts.get()};
 
     while (true) {
         switch (t.kind) {
         case '*':
-            left *= primary();
+            left *= factor();
             t = ts.get();
             break;
-        case '/': {
-            double d {primary()};
+        case '/':
+        {
+            double d{factor()};
             if (d == 0) {
                 throw std::runtime_error("division by zero");
             }
@@ -206,8 +208,8 @@ double term()
 /// @post Return an expression.
 double expression()
 {
-    double left {term()};
-    Token t {ts.get()};
+    double left{term()};
+    Token t{ts.get()};
 
     while (true) {
         switch (t.kind) {
@@ -228,7 +230,7 @@ double expression()
 
 int main()
 try {
-    double val {};
+    double val{};
 
     while (std::cin) {
         Token t = ts.get();
@@ -242,7 +244,6 @@ try {
         else {
             ts.putback(t);
         }
-
         val = expression();
     }
 
