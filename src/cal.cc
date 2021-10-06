@@ -4,12 +4,15 @@
 
 #include "cal.h"
 
-// The grammar is as follows:
+// The Wirth syntax notation grammar is as follows:
 //
-//  expression ::= term {"+" term | "-" term}.
-//  term       ::= factor {"*" factor | "/" factor}.
-//  factor     ::= number | "(" expression ")" | "{" expression "}".
-//  number     ::= floating-point-literal.
+//  expression = term {"+" term | "-" term} .
+//  term       = factor {"*" factor | "/" factor} .
+//  factor     = number
+//             | "(" expression ")" 
+//             | "[" expression "]"
+//             | "{" expression "}" .
+//  number     = floating-point-literal .
 
 /// @class Token
 /// @brief A token class.
@@ -87,6 +90,8 @@ Token Token_stream::get()
     case ')':
     case '{':
     case '}':
+    case '[':
+    case ']':
     case '*':
     case '/':
     case '+':
@@ -143,6 +148,16 @@ double factor()
         t = ts.get();
         if (t.kind != '}') {
             throw std::runtime_error("'}' expected");
+        }
+        return d;
+    }
+    // Crochets.
+    case '[':
+    {
+        double d{expression()};
+        t = ts.get();
+        if (t.kind != ']') {
+            throw std::runtime_error("']' expected");
         }
         return d;
     }
