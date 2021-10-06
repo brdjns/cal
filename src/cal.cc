@@ -248,10 +248,10 @@ try {
     return 0;
 }
 catch (std::exception& e) {
-    std::cerr << "error: " << e.what() << '\n';
+    std::cerr << "error: " << e.what();
     return 1;
 }
 catch (...) {
-    std::cerr << "unknown exception\n";
+    std::cerr << "unknown exception";
     return 2;
 }
