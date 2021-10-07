@@ -231,8 +231,7 @@ try {
     double val{};
 
     while (std::cin) {
-        Token t = ts.get();
-
+        Token t{ts.get()};
         if (t.kind == 'q') {
             break;
         }
