@@ -9,7 +9,7 @@
 //  expression = term {"+" term | "-" term} .
 //  term       = factor {"*" factor | "/" factor} .
 //  factor     = number
-//             | "(" expression ")" 
+//             | "(" expression ")"
 //             | "[" expression "]"
 //             | "{" expression "}" .
 //  number     = floating-point-literal .
@@ -112,7 +112,7 @@ Token Token_stream::get()
         std::cin.putback(ch);
         double val{};
         std::cin >> val;
-        return Token{'8', val};
+        return Token{'#', val};
     }
     default:
         throw std::runtime_error("bad token");
@@ -162,7 +162,7 @@ double factor()
         return d;
     }
     // Numbers.
-    case '8':
+    case '#':
         return t.value;
     default:
         throw std::runtime_error("factor expected");
@@ -236,21 +236,21 @@ try {
             break;
         }
         if (t.kind == ';') {
-            std::cout << "=" << val << '\n';
+            std::cout << "= " << val << '\n';
         }
         else {
             ts.putback(t);
+            val = expression();
         }
-        val = expression();
     }
 
     return 0;
 }
 catch (std::exception& e) {
-    std::cerr << "error: " << e.what();
+    std::cerr << "error: " << e.what() << '\n';
     return 1;
 }
 catch (...) {
-    std::cerr << "unknown exception";
+    std::cerr << "unknown exception\n";
     return 2;
 }
