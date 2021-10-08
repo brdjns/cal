@@ -229,14 +229,16 @@ double expression()
 int main()
 try {
     double val{};
-
+    // Get the greatest available precision from a double.
+    std::cout.precision(std::numeric_limits<double>::max_digits10 - 1);
+    
     while (std::cin) {
         Token t{ts.get()};
         if (t.kind == 'q') {
             break;
         }
         if (t.kind == ';') {
-            std::cout << "= " << val << '\n';
+            std::cout << "= " << std::scientific << val << '\n';
         }
         else {
             ts.putback(t);
@@ -244,13 +246,13 @@ try {
         }
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 catch (std::exception& e) {
     std::cerr << "error: " << e.what() << '\n';
-    return 1;
+    return EXIT_FAILURE;
 }
 catch (...) {
     std::cerr << "unknown exception\n";
-    return 2;
+    return EXIT_FAILURE;
 }
