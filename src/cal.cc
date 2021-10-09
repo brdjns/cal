@@ -230,16 +230,16 @@ int main()
 try {
     std::string prompt{">> "};
     double val{};
-   
+
     // Get the greatest available precision from a double.
-    std::cout.precision(std::numeric_limits<double>::max_digits10 - 1);
+    std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
     while (std::cin) {
         Token t{ts.get()};
         if (t.kind == 'q') {
             break;
         }
         if (t.kind == ';') {
-            std::cout << prompt << std::scientific << val << '\n';
+            std::cout << prompt << val << '\n';
         }
         else {
             ts.putback(t);
