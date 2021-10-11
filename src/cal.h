@@ -21,4 +21,27 @@ namespace Cal {
             throw std::runtime_error("narrow_cast<>() failed");
         return r;
     }
+
+    /// @brief Construct an expression.
+    /// @pre A term.
+    /// @post Return an expression.
+    double expression();
+
+    /// @brief Construct a term.
+    /// @pre A factor.
+    /// @post Return a term.
+    /// @throws runtime_error for division by zero.
+    double term();
+
+    /// @brief Construct a factor.
+    /// @pre A token that is a number or parentheses.
+    /// @post Return a factor.
+    /// @throws runtime_error if next token is not an expression.
+    double factor();
+
+    /// @brief Construct a unary expression.
+    /// @pre A factor.
+    /// @post Return a unary expression.
+    double unary_expression();
+
 }
