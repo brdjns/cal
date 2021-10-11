@@ -3,16 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "cal.h"
-
-// The Wirth syntax notation grammar is as follows:
-//
-//  expression = term {"+" term | "-" term} .
-//  term       = factor {"*" factor | "/" factor} .
-//  factor     = number
-//             | "(" expression ")"
-//             | "[" expression "]"
-//             | "{" expression "}" .
-//  number     = floating-point-literal .
+#include "functions.h"
 
 /// @class Token
 /// @brief A token class.
@@ -96,6 +87,7 @@ Token Token_stream::get()
     case '/':
     case '+':
     case '-':
+    case '!':
         return Token{ch};
     case '.':
     case '0':
@@ -169,24 +161,47 @@ double factor()
     }
 }
 
+/// @brief Construct a unary expression.
+/// @pre A factor.
+/// @post Return a unary expression.
+double unary_expression()
+{
+    double left{factor()};
+    Token t{ts.get()};
+    int temp = Cal::narrow_cast<int>(left);
+    while (true) {
+        switch (t.kind) {
+        case '!':
+        {
+            left = Cal::factorial(temp);
+            return left;
+            break;
+        }
+        default:
+            ts.putback(t);
+            return left;
+        }
+    }
+}
+
 /// @brief Construct a term.
 /// @pre A factor.
 /// @post Return a term.
 /// @throws runtime_error for division by zero.
 double term()
 {
-    double left{factor()};
+    double left{unary_expression()};
     Token t{ts.get()};
 
     while (true) {
         switch (t.kind) {
         case '*':
-            left *= factor();
+            left *= unary_expression();
             t = ts.get();
             break;
         case '/':
         {
-            double d{factor()};
+            double d{unary_expression()};
             if (d == 0) {
                 throw std::runtime_error("division by zero");
             }

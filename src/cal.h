@@ -4,8 +4,21 @@
 
 #pragma once
 
-#include <iostream>
-#include <vector>
-#include <stdexcept>
 #include <cstdlib>
+#include <iostream>
 #include <limits>
+#include <stdexcept>
+#include <vector>
+
+namespace Cal {
+
+    /// Cast a wider type to a narrower type.
+    template<class R, class A>
+    R narrow_cast(const A& a)
+    {
+        R r = R(a);
+        if (A(r) != a)
+            throw std::runtime_error("narrow_cast<>() failed");
+        return r;
+    }
+}
