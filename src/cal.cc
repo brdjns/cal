@@ -88,7 +88,7 @@ const std::string quitkey = "quit";
 // @brief Fetch a token from the standard input.
 // @pre An ASCII character.
 // @post Return a token.
-// @throws runtime_error if token is not a digit, parentheses or operator.
+// @throws runtime_error if token is not alphanumeric or an operator.
 Token Token_stream::get()
 {
     if (full) {
@@ -153,6 +153,8 @@ Token Token_stream::get()
     return Token{'?'}; // never reached
 }
 
+// @brief Ignore a character in the token stream.
+// @param c a character to ignore
 void Token_stream::ignore(char c)
 {
     if (full && c == buffer.kind) {
@@ -181,9 +183,10 @@ public:
     Variable(std::string id, double v) : name{id}, value{v} {}
 };
 
-// @brief A symbol table of variables.
+// A symbol table of variables.
 std::vector<Variable> symtab;
 
+// Retrieve a variable's value.
 double get_value(std::string str)
 {
     for (Variable& i : symtab) {
@@ -195,6 +198,7 @@ double get_value(std::string str)
     return 1;
 }
 
+// Bind a value to an identifier.
 void set_value(std::string str, double val)
 {
     for (Variable& i : symtab) {
@@ -206,6 +210,7 @@ void set_value(std::string str, double val)
     throw std::runtime_error("set: undefined name");
 }
 
+// Determine if the specified variable is declared.
 bool is_declared(std::string str)
 {
     for (Variable& i : symtab) {
@@ -219,6 +224,7 @@ bool is_declared(std::string str)
 double expression();
 Token_stream ts;
 
+// Construct a factor.
 double factor()
 {
     Token t{ts.get()};
@@ -265,6 +271,7 @@ double factor()
     return 0; // never reached
 }
 
+// Construct a postfix expression.
 double postfix_expression()
 {
     double left{factor()};
@@ -289,6 +296,7 @@ double postfix_expression()
     }
 }
 
+// Construct a term.
 double term()
 {
     double left{postfix_expression()};
@@ -324,6 +332,7 @@ double term()
     }
 }
 
+// Construct an expression.
 double expression()
 {
     double left{term()};
@@ -346,9 +355,7 @@ double expression()
     }
 }
 
-// Append a variable to the variable symbol table.
-// @param var a variable
-// @param val a variable value
+// Add a variable to the symbol table.
 double define_name(std::string var, double val)
 {
     if (is_declared(var)) {
@@ -377,6 +384,7 @@ double declaration()
     return temp;
 }
 
+// Turn a declaration into a statement.
 double statement()
 {
     Token t{ts.get()};
@@ -389,11 +397,13 @@ double statement()
     }
 }
 
+// Clean up remaining tokens during an exception.
 void clean_up_mess()
 {
     ts.ignore(print);
 }
 
+// Compute an expression.
 void calculate()
 {
     // Get the greatest available precision from a double.
@@ -432,6 +442,6 @@ catch (std::exception& e) {
     return EXIT_FAILURE;
 }
 catch (...) {
-    std::cerr << "unknown exception\n";
+    std::cerr << "exception\n";
     return EXIT_FAILURE;
 }
