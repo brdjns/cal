@@ -59,11 +59,29 @@ private:
     Token buffer; // A buffer of tokens
 };
 
-const char let = 'L';
-const char quit = 'Q';
-const char print = ';';
-const char number = '#';
-const char name = 'a';
+// Recognised scanner symbols.
+enum Symbol {
+    print = ';',
+    lparen = '(',
+    rparen = ')',
+    lbrace = '{',
+    rbrace = '}',
+    lbracket = '[',
+    rbracket = ']',
+    mul = '*',
+    over = '/',
+    mod = '%',
+    plus = '+',
+    minus = '-',
+    bang = '!',
+    equals = '=',
+    let = 'L',
+    quit = 'Q',
+    number = '#',
+    name = 'a',
+};
+
+// Keywords.
 const std::string declkey = "let";
 const std::string quitkey = "quit";
 
@@ -83,18 +101,18 @@ Token Token_stream::get()
 
     switch (ch) {
     case print:
-    case '(':
-    case ')':
-    case '{':
-    case '}':
-    case '[':
-    case ']':
-    case '*':
-    case '/':
-    case '%':
-    case '+':
-    case '-':
-    case '!': // factorial
+    case lparen:
+    case rparen:
+    case lbrace:
+    case rbrace:
+    case lbracket:
+    case rbracket:
+    case mul:
+    case over:
+    case mod:
+    case plus:
+    case minus:
+    case bang:
         return Token{ch};
     case '.':
     case '0':
@@ -162,13 +180,13 @@ public:
 };
 
 // @brief A symbol table of variables.
-std::vector<Variable> names;
+std::vector<Variable> symtab;
 
 double get_value(std::string str)
 {
-    for (size_t i = 0; i < names.size(); ++i) { // FIXME: range-for
-        if (names[i].name == str) {
-            return names[i].value;
+    for (size_t i = 0; i < symtab.size(); ++i) {
+        if (symtab[i].name == str) {
+            return symtab[i].value;
         }
     }
     throw std::runtime_error("get: undefined name");
@@ -177,9 +195,9 @@ double get_value(std::string str)
 
 void set_value(std::string str, double val)
 {
-    for (size_t i = 0; i < names.size(); ++i) { // FIXME: range-for
-        if (names[i].name == str) {
-            names[i].value = val;
+    for (size_t i = 0; i < symtab.size(); ++i) {
+        if (symtab[i].name == str) {
+            symtab[i].value = val;
             return;
         }
     }
@@ -188,8 +206,8 @@ void set_value(std::string str, double val)
 
 bool is_declared(std::string str)
 {
-    for (size_t i = 0; i < names.size(); ++i) {
-        if (names[i].name == str) {
+    for (size_t i = 0; i < symtab.size(); ++i) {
+        if (symtab[i].name == str) {
             return true;
         }
     }
@@ -204,45 +222,40 @@ double factor()
     Token t{ts.get()};
 
     switch (t.kind) {
-    // Brackets.
-    case '(':
+    case rparen:
     {
         double temp{expression()};
         t = ts.get();
-        if (t.kind != ')') {
+        if (t.kind != lparen) {
             throw std::runtime_error("closing ')' missing");
         }
         return temp;
         break;
     }
-    // Braces.
-    case '{':
+    case lbrace:
     {
         double temp{expression()};
         t = ts.get();
-        if (t.kind != '}') {
+        if (t.kind != rbrace) {
             throw std::runtime_error("closing '}' missing");
         }
         return temp;
     }
-    // Crochets.
-    case '[':
+    case lbracket:
     {
         double temp{expression()};
         t = ts.get();
-        if (t.kind != ']') {
+        if (t.kind != rbracket) {
             throw std::runtime_error("closing ']' missing");
         }
         return temp;
         break;
     }
     // Negate.
-    case '-':
+    case minus:
         return -factor();
-    // Numbers.
     case number:
         return t.value;
-    // Names.
     case name:
         return get_value(t.name);
     default:
@@ -259,12 +272,11 @@ double postfix_expression()
 
     while (true) {
         switch (t.kind) {
-        // Factorial.
-        case '!':
+        case bang:
         {
             int temp = Cal::narrow_cast<int>(left);
-            if (temp < 0) { 
-                throw std::runtime_error("negative factorial"); 
+            if (temp < 0) {
+                throw std::runtime_error("negative factorial");
             }
             left = Cal::factorial(temp);
             return left;
@@ -284,12 +296,10 @@ double term()
     while (true) {
         Token t{ts.get()};
         switch (t.kind) {
-        // Multiply.
-        case '*':
+        case mul:
             left *= postfix_expression();
             break;
-        // Divide.
-        case '/':
+        case over:
         {
             double temp{postfix_expression()};
             if (temp == 0) {
@@ -298,7 +308,6 @@ double term()
             left /= temp;
             break;
         }
-        // Modulo.
         case '%':
         {
             double temp{factor()};
@@ -322,13 +331,11 @@ double expression()
 
     while (true) {
         switch (t.kind) {
-        // Add.
-        case '+':
+        case plus:
             left += term();
             t = ts.get();
             break;
-        // Subtract.
-        case '-':
+        case minus:
             left -= term();
             t = ts.get();
             break;
@@ -347,7 +354,7 @@ double define_name(std::string var, double val)
     if (is_declared(var)) {
         throw std::runtime_error("variable declared twice");
     }
-    names.push_back(Variable{var, val});
+    symtab.push_back(Variable{var, val});
     return val;
 }
 
