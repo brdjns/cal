@@ -9,6 +9,9 @@
 #include <limits>
 #include <stdexcept>
 #include <vector>
+#include <cmath>
+#include <string>
+#include <cctype>
 
 namespace Cal {
 
@@ -22,26 +25,44 @@ namespace Cal {
         return r;
     }
 
-    /// @brief Construct an expression.
-    /// @pre A term.
-    /// @post Return an expression.
+    // @brief Construct an expression.
+    // @pre A term.
+    // @post Return an expression.
     double expression();
 
-    /// @brief Construct a term.
-    /// @pre A factor.
-    /// @post Return a term.
-    /// @throws runtime_error for division by zero.
+    // @brief Construct a term.
+    // @pre A factor.
+    // @post Return a term.
+    // @throws runtime_error for division by zero.
     double term();
 
-    /// @brief Construct a factor.
-    /// @pre A token that is a number or parentheses.
-    /// @post Return a factor.
-    /// @throws runtime_error if next token is not an expression.
+    // @brief Construct a factor.
+    // @pre A token that is a number or parentheses.
+    // @post Return a factor.
+    // @throws runtime_error if next token is not an expression.
     double factor();
 
-    /// @brief Construct a unary expression.
-    /// @pre A factor.
-    /// @post Return a unary expression.
-    double unary_expression();
+    // @brief Construct a unary expression.
+    // @pre A factor.
+    // @post Return a unary expression.
+    double postfix_expression();
+
+    double statement();
+
+    double declaration();
+
+    double define_name(std::string var, double val);
+
+    void set_value(std::string str, double val);
+
+    double get_value(std::string str);
+
+    void calculate();
+
+    void clean_up_mess();
+
+    bool is_declared(std::string str);
+
+    void ignore(char ch);
 
 }
