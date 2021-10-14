@@ -186,9 +186,9 @@ std::vector<Variable> symtab;
 
 double get_value(std::string str)
 {
-    for (size_t i = 0; i < symtab.size(); ++i) {
-        if (symtab[i].name == str) {
-            return symtab[i].value;
+    for (Variable& i : symtab) {
+        if (i.name == str) {
+            return i.value;
         }
     }
     throw std::runtime_error("get: undefined name");
@@ -197,9 +197,9 @@ double get_value(std::string str)
 
 void set_value(std::string str, double val)
 {
-    for (size_t i = 0; i < symtab.size(); ++i) {
-        if (symtab[i].name == str) {
-            symtab[i].value = val;
+    for (Variable& i : symtab) {
+        if (i.name == str) {
+            i.value = val;
             return;
         }
     }
@@ -208,8 +208,8 @@ void set_value(std::string str, double val)
 
 bool is_declared(std::string str)
 {
-    for (size_t i = 0; i < symtab.size(); ++i) {
-        if (symtab[i].name == str) {
+    for (Variable& i : symtab) {
+        if (i.name == str) {
             return true;
         }
     }
