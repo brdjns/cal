@@ -400,7 +400,7 @@ void calculate()
     std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
 
     const std::string prompt = "? ";
-    const std::string result = "=> ";
+    const std::string result = ": ";
 
     while (true) try {
             std::cout << prompt;
