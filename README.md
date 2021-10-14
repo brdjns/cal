@@ -1,8 +1,8 @@
 # Cal
 Cal is a portable, command-line interface, desk calculator.
 
-Cal supports basic arithmetic using `+`, `-`, `/` and `*`.  It also supports
-factorials, with the `!` operator.
+Cal supports basic arithmetic using `+`, `-`, `/`, `% ` and `*`.  It also
+supports factorials, with the `!` operator.
 
 ## Building
 Cal uses CMake as its build system. To build:
@@ -21,7 +21,8 @@ The Wirth syntax notation grammar is as follows:
     term = 
           unary-expression
         | term "*" factor
-        | term "/" factor .
+        | term "/" factor
+        | term "%" factor .
 
     unary-expression = 
           factor
