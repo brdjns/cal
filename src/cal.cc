@@ -222,15 +222,14 @@ double factor()
     Token t{ts.get()};
 
     switch (t.kind) {
-    case rparen:
+    case lparen:
     {
         double temp{expression()};
         t = ts.get();
-        if (t.kind != lparen) {
+        if (t.kind != rparen) {
             throw std::runtime_error("closing ')' missing");
         }
         return temp;
-        break;
     }
     case lbrace:
     {
@@ -249,7 +248,6 @@ double factor()
             throw std::runtime_error("closing ']' missing");
         }
         return temp;
-        break;
     }
     // Negate.
     case minus:
@@ -308,7 +306,7 @@ double term()
             left /= temp;
             break;
         }
-        case '%':
+        case mod:
         {
             double temp{factor()};
             if (temp == 0) {
@@ -368,7 +366,7 @@ double declaration()
     std::string vname{t.name};
 
     Token t2{ts.get()};
-    if (t2.kind != '=') {
+    if (t2.kind != equals) {
         throw std::runtime_error("'=' missing in declaration");
     }
 
@@ -394,13 +392,14 @@ void clean_up_mess()
     ts.ignore(print);
 }
 
-const std::string prompt = "> ";
-const std::string result = ": ";
-
 void calculate()
 {
     // Get the greatest available precision from a double.
     std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
+
+    const std::string prompt = "? ";
+    const std::string result = "=> ";
+
     while (true) try {
             std::cout << prompt;
             Token t = ts.get();
