@@ -113,6 +113,7 @@ Token Token_stream::get()
     case plus:
     case minus:
     case bang:
+    case equals:
         return Token{ch};
     case '.':
     case '0':
@@ -149,6 +150,7 @@ Token Token_stream::get()
         }
         throw std::runtime_error("invalid token");
     }
+    return Token{'?'}; // never reached
 }
 
 void Token_stream::ignore(char c)
