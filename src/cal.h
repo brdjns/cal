@@ -4,14 +4,15 @@
 
 #pragma once
 
+#include <cctype>
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
+#include <sstream>
 #include <stdexcept>
-#include <vector>
-#include <cmath>
 #include <string>
-#include <cctype>
+#include <vector>
 
 namespace Cal {
 
@@ -52,15 +53,15 @@ namespace Cal {
     double statement();
 
     // @brief Declare a variable.
-    // @throws std::runtime_error if the variable name is missing in a declaration.
-    // @throws std::runtime_error if '=' is missing in a declaration.
+    // @throws runtime_error if the variable name is missing in a declaration.
+    // @throws runtime_error if '=' is missing in a declaration.
     // @return an expression that is the value of the variable.
     double declaration();
 
     // @brief Add a variable to the symbol table.
     // @param var a variable.
     // @param val the variable's value.
-    // @throws std::runtime_error if the variable is already declared.
+    // @throws runtime_error if the variable is already declared.
     // @return the variable's value.
     double define_name(std::string var, double val);
 
@@ -72,7 +73,7 @@ namespace Cal {
 
     // @brief Retrieve a variable's value.
     // @param str a variable identifier.
-    // @throws std::runtume_error if the variable is undefined.
+    // @throws runtume_error if the variable is undefined.
     // @return the variable's value.
     double get_value(std::string str);
 
@@ -87,5 +88,30 @@ namespace Cal {
     // @param str the variable identifier to be tested.
     // @return true if the variable is declared; false otherwise.
     bool is_declared(std::string str);
+
+    // @brief Throw a runtime exception.
+    // @param str an error message.
+    // @throws runtime_error when called.
+    inline void error(const std::string& str) { throw std::runtime_error(str); }
+
+    // @brief Throw a runtime exception.
+    // @param str an error message.
+    // @param str2 an error message to append to str.
+    // @throws runtime_error when called.
+    inline void error(const std::string& str, const std::string& str2)
+    {
+        error(str + str2);
+    }
+
+    // @brief Throw a runtime exception.
+    // @param str an error message.
+    // @param i a character value.
+    // @throws runtime_error when called.
+    inline void error(const std::string& str, int i)
+    {
+        std::ostringstream os;
+        os << str << ": " << i;
+        error(os.str());
+    }
 
 }

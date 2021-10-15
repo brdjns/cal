@@ -150,7 +150,7 @@ Token Token_stream::get()
             }
             return Token{name, str};
         }
-        throw std::runtime_error("invalid token");
+        Cal::error("invalid token");
     }
     //return Token{'?'}; // never reached
 }
@@ -196,7 +196,7 @@ double get_value(std::string str)
             return i.value;
         }
     }
-    throw std::runtime_error("get: undefined name");
+    Cal::error("get: undefined name");
     return 1;
 }
 
@@ -209,7 +209,7 @@ void set_value(std::string str, double val)
             return;
         }
     }
-    throw std::runtime_error("set: undefined name");
+    Cal::error("set: undefined name");
 }
 
 // Determine if the specified variable is declared.
@@ -237,7 +237,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rparen) {
-            throw std::runtime_error("closing ')' missing");
+            Cal::error("closing ')' missing");
         }
         return temp;
     }
@@ -246,7 +246,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rbrace) {
-            throw std::runtime_error("closing '}' missing");
+            Cal::error("closing '}' missing");
         }
         return temp;
     }
@@ -255,7 +255,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rbracket) {
-            throw std::runtime_error("closing ']' missing");
+            Cal::error("closing ']' missing");
         }
         return temp;
     }
@@ -270,7 +270,7 @@ double factor()
     case name:
         return get_value(t.name);
     default:
-        throw std::runtime_error("factor expected");
+        Cal::error("factor expected");
     }
 
     return 0; // never reached
@@ -288,7 +288,7 @@ double postfix_expression()
         {
             int temp = Cal::narrow_cast<int>(left);
             if (temp < 0) {
-                throw std::runtime_error("negative factorial");
+                Cal::error("negative factorial");
             }
             left = Cal::factorial(temp);
             return left;
@@ -316,7 +316,7 @@ double term()
         {
             double temp{postfix_expression()};
             if (temp == 0) {
-                throw std::runtime_error("division by zero");
+                Cal::error("division by zero");
             }
             left /= temp;
             break;
@@ -325,7 +325,7 @@ double term()
         {
             double temp{factor()};
             if (temp == 0) {
-                throw std::runtime_error("modulo division by zero");
+                Cal::error("modulo division by zero");
             }
             left = std::fmod(left, temp);
             break;
@@ -364,7 +364,7 @@ double expression()
 double define_name(std::string var, double val)
 {
     if (is_declared(var)) {
-        throw std::runtime_error("variable declared twice");
+        Cal::error("variable declared twice");
     }
     symtab.push_back(Variable{var, val});
     return val;
@@ -375,13 +375,13 @@ double declaration()
 {
     Token t{ts.get()};
     if (t.kind != name) {
-        throw std::runtime_error("identifier expected in declaration");
+        Cal::error("identifier expected in declaration");
     }
     std::string vname{t.name};
 
     Token t2{ts.get()};
     if (t2.kind != equals) {
-        throw std::runtime_error("'=' missing in declaration");
+        Cal::error("'=' missing in declaration");
     }
 
     double temp{expression()};
