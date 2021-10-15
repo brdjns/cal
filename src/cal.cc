@@ -196,11 +196,11 @@ double get_value(std::string str)
             return i.value;
         }
     }
-    Cal::error("get: undefined name");
+    Cal::error("get: undefined identifier ", str);
     return 1;
 }
 
-// Bind a value to an identifier.
+// Bind a value to a variable.
 void set_value(std::string str, double val)
 {
     for (Variable& i : symtab) {
@@ -209,7 +209,7 @@ void set_value(std::string str, double val)
             return;
         }
     }
-    Cal::error("set: undefined name");
+    Cal::error("set: undefined identifier ", str);
 }
 
 // Determine if the specified variable is declared.
@@ -288,7 +288,7 @@ double postfix_expression()
         {
             int temp = Cal::narrow_cast<int>(left);
             if (temp < 0) {
-                Cal::error("negative factorial");
+                Cal::error("factorial of a negative number");
             }
             left = Cal::factorial(temp);
             return left;

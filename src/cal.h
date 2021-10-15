@@ -96,7 +96,7 @@ namespace Cal {
 
     // @brief Throw a runtime exception.
     // @param str an error message.
-    // @param str2 an error message to append to str.
+    // @param str2 a string to append to the error message.
     // @throws runtime_error when called.
     inline void error(const std::string& str, const std::string& str2)
     {
