@@ -50,9 +50,9 @@ public:
         full = true;
     }
 
-    // @brief Ignore a character.
+    // @brief Discard characters up to and including a c.
     // @param ch character to ignore
-    void ignore(char ch);
+    void ignore(char c);
 
 private:
     bool full;    // True when the token buffer is full
@@ -153,7 +153,7 @@ Token Token_stream::get()
     return Token{'?'}; // never reached
 }
 
-// @brief Ignore a character in the token stream.
+// @brief Discard characters up to and including a c.
 // @param c a character to ignore
 void Token_stream::ignore(char c)
 {
@@ -409,18 +409,19 @@ void calculate()
     // Get the greatest available precision from a double.
     std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
 
-    const std::string prompt = "? ";
-    const std::string result = ": ";
+    const std::string prompt = "> ";
 
     while (true) try {
             std::cout << prompt;
             Token t = ts.get();
-            while (t.kind == print) { t = ts.get(); }
+            while (t.kind == print) { // discard all 'print' tokens
+                t = ts.get();
+            }
             if (t.kind == quit) {
                 return;
             }
             ts.putback(t);
-            std::cout << result << statement() << '\n';
+            std::cout << statement() << '\n';
         }
         catch (std::runtime_error& e) {
             std::cerr << e.what() << '\n';
@@ -430,7 +431,7 @@ void calculate()
 
 int main()
 try {
-    // Predefined names.
+    // Predefined constants.
     define_name("PI", 3.1415926535);
     define_name("E", 2.7182818284);
 
