@@ -13,23 +13,29 @@ Cal uses CMake as its build system. To build:
 ## Grammar
 The Wirth syntax notation grammar is as follows:
 ```
+    declaration =
+          "let" "=" expression .
+
     expression =
-          term
+          declaration
+        | term
         | expression "+" term
         | expression "-" term .
 
     term = 
-          unary-expression
+          postfix-expression
         | term "*" factor
         | term "/" factor
         | term "%" factor .
 
-    unary-expression = 
+    postfix-expression = 
           factor
-        | unary-expression "!" .
+        | postfix-expression "!" .
 
     factor =
           number
+        | "-" number
+        | "+" number
         | "(" expression ")"
         | "[" expression "]"
         | "{" expression "}" .

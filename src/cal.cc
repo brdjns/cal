@@ -132,7 +132,7 @@ Token Token_stream::get()
         std::cin >> val;
         return Token{number, val};
     }
-    case '\0': // catch interrupts: ^Z on MS-Windows
+    case '\0': // ^Z
         return Token{quit};
     default:
         if (std::isalpha(ch)) {
@@ -259,9 +259,12 @@ double factor()
         }
         return temp;
     }
-    // Negate.
+    // -NUM.
     case minus:
         return -factor();
+    // +NUM.
+    case plus:
+        return factor();
     case number:
         return t.value;
     case name:
