@@ -132,6 +132,8 @@ Token Token_stream::get()
         std::cin >> val;
         return Token{number, val};
     }
+    case '\0': // catch interrupts: ^Z on MS-Windows
+        return Token{quit};
     default:
         if (std::isalpha(ch)) {
             std::string str;
@@ -150,7 +152,7 @@ Token Token_stream::get()
         }
         throw std::runtime_error("invalid token");
     }
-    return Token{'?'}; // never reached
+    //return Token{'?'}; // never reached
 }
 
 // @brief Discard characters up to and including a c.
@@ -424,7 +426,7 @@ void calculate()
             std::cout << statement() << '\n';
         }
         catch (std::runtime_error& e) {
-            std::cerr << e.what() << '\n';
+            std::cerr << "error: " <<  e.what() << '\n';
             clean_up_mess();
         }
 }
@@ -439,7 +441,7 @@ try {
     return EXIT_SUCCESS;
 }
 catch (std::exception& e) {
-    std::cerr << "error: " << e.what() << '\n';
+    std::cerr << e.what() << '\n';
     return EXIT_FAILURE;
 }
 catch (...) {
