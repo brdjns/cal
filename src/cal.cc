@@ -74,6 +74,7 @@ enum Symbol {
     plus = '+',
     minus = '-',
     bang = '!',
+    caret = '^',
     equals = '=',
     let = 'L',
     quit = 'Q',
@@ -114,6 +115,7 @@ Token Token_stream::get()
     case minus:
     case bang:
     case equals:
+    case caret:
         return Token{ch};
     case '.':
     case '0':
@@ -152,7 +154,7 @@ Token Token_stream::get()
         }
         Cal::error("invalid token");
     }
-    //return Token{'?'}; // never reached
+    return Token{'?'}; // never reached
 }
 
 // @brief Discard characters up to and including a c.
@@ -290,8 +292,14 @@ double postfix_expression()
             if (temp < 0) {
                 Cal::error("factorial of a negative number");
             }
-            left = Cal::factorial(temp);
-            return left;
+            return left = Cal::factorial(temp);
+            break;
+        }
+        case caret:
+        {
+            double temp{factor()};
+            return left = std::pow(left, temp);
+            t = ts.get();
             break;
         }
         default:
@@ -323,7 +331,7 @@ double term()
         }
         case mod:
         {
-            double temp{factor()};
+            double temp{postfix_expression()};
             if (temp == 0) {
                 Cal::error("modulo division by zero");
             }

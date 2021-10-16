@@ -31,6 +31,7 @@ The Wirth syntax notation grammar is as follows:
     postfix-expression = 
           factor
         | postfix-expression "!" .
+        | postfix-expression "^" factor .
 
     factor =
           number
