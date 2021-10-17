@@ -79,7 +79,7 @@ enum Symbol {
     let = 'L',
     quit = 'Q',
     number = '#',
-    name = 'a',
+    name = '@',
 };
 
 // Keywords.
