@@ -22,7 +22,7 @@ namespace Cal {
     {
         R r = R(a);
         if (A(r) != a)
-            throw std::runtime_error("narrow_cast<>() failed");
+            throw std::runtime_error("information loss");
         return r;
     }
 
@@ -59,23 +59,23 @@ namespace Cal {
     double declaration();
 
     // @brief Add a variable to the symbol table.
-    // @param var a variable.
-    // @param val the variable's value.
+    // @param variable a variable.
+    // @param value the variable's value.
     // @throws runtime_error if the variable is already declared.
     // @return the variable's value.
-    double define_name(std::string var, double val);
+    double define_name(std::string variable, double value);
 
     // @brief Bind a value to an identifier.
-    // @param str a variable identifier string.
-    // @param val a numeric value.
+    // @param variable a variable identifier string.
+    // @param value a numeric value.
     // @throws std::runtume_error if str is undefined.
-    void set_value(std::string str, double val);
+    void set_value(std::string variable, double value);
 
     // @brief Retrieve a variable's value.
-    // @param str a variable identifier.
+    // @param variable a variable identifier.
     // @throws runtume_error if the variable is undefined.
     // @return the variable's value.
-    double get_value(std::string str);
+    double get_value(std::string variable);
 
     // @brief Compute an expression.
     // @return An expression.
@@ -85,32 +85,35 @@ namespace Cal {
     void clean_up_mess();
 
     // @brief Determine if the specified variable is declared.
-    // @param str the variable identifier to be tested.
+    // @param variable the variable identifier to be tested.
     // @return true if the variable is declared; false otherwise.
-    bool is_declared(std::string str);
+    bool is_declared(std::string variable);
 
     // @brief Throw a runtime exception.
-    // @param str an error message.
+    // @param message an error message.
     // @throws runtime_error when called.
-    inline void error(const std::string& str) { throw std::runtime_error(str); }
-
-    // @brief Throw a runtime exception.
-    // @param str an error message.
-    // @param str2 a string to append to the error message.
-    // @throws runtime_error when called.
-    inline void error(const std::string& str, const std::string& str2)
+    inline void error(const std::string& message)
     {
-        error(str + str2);
+        throw std::runtime_error(message);
     }
 
     // @brief Throw a runtime exception.
-    // @param str an error message.
-    // @param i a character value.
+    // @param message an error message.
+    // @param message2 a string to append to the error message.
     // @throws runtime_error when called.
-    inline void error(const std::string& str, int i)
+    inline void error(const std::string& message, const std::string& message2)
+    {
+        error(message + message2);
+    }
+
+    // @brief Throw a runtime exception.
+    // @param message an error message.
+    // @param value a character value.
+    // @throws runtime_error when called.
+    inline void error(const std::string& message, int value)
     {
         std::ostringstream os;
-        os << str << ": " << i;
+        os << message << ": " << value;
         error(os.str());
     }
 

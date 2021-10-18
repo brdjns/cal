@@ -79,7 +79,7 @@ enum Symbol {
     let = 'L',
     quit = 'Q',
     number = '#',
-    name = '@',
+    ident = '@',
     fsqrt = 'S',
 };
 
@@ -133,9 +133,9 @@ Token Token_stream::get()
     case '9':
     {
         std::cin.unget();
-        double val{};
-        std::cin >> val;
-        return Token{number, val};
+        double value{};
+        std::cin >> value;
+        return Token{number, value};
     }
     case '\0': // ^Z
         return Token{quit};
@@ -156,7 +156,7 @@ Token Token_stream::get()
             if (str == fsqrtkey) {
                 return Token{fsqrt};
             }
-            return Token{name, str};
+            return Token{ident, str};
         }
         Cal::error("invalid token");
     }
@@ -197,34 +197,34 @@ public:
 std::vector<Variable> symtab;
 
 // Retrieve a variable's value.
-double get_value(std::string str)
+double get_value(std::string variable)
 {
     for (Variable& i : symtab) {
-        if (i.name == str) {
+        if (i.name == variable) {
             return i.value;
         }
     }
-    Cal::error("get: undefined identifier ", str);
+    Cal::error("get: undefined identifier ", variable);
     return 1;
 }
 
 // Bind a value to a variable.
-void set_value(std::string str, double val)
+void set_value(std::string variable, double value)
 {
     for (Variable& i : symtab) {
-        if (i.name == str) {
-            i.value = val;
+        if (i.name == variable) {
+            i.value = value;
             return;
         }
     }
-    Cal::error("set: undefined identifier ", str);
+    Cal::error("set: undefined identifier ", variable);
 }
 
 // Determine if the specified variable is declared.
-bool is_declared(std::string str)
+bool is_declared(std::string variable)
 {
     for (Variable& i : symtab) {
-        if (i.name == str) {
+        if (i.name == variable) {
             return true;
         }
     }
@@ -292,7 +292,7 @@ double factor()
         return factor();
     case number:
         return t.value;
-    case name:
+    case ident:
         return get_value(t.name);
     default:
         Cal::error("factor expected");
@@ -392,32 +392,32 @@ double expression()
 }
 
 // Add a variable to the symbol table.
-double define_name(std::string var, double val)
+double define_name(std::string variable, double value)
 {
-    if (is_declared(var)) {
+    if (is_declared(variable)) {
         Cal::error("variable declared twice");
     }
-    symtab.push_back(Variable{var, val});
-    return val;
+    symtab.push_back(Variable{variable, value});
+    return value;
 }
 
 // Declare a variable.
 double declaration()
 {
     Token t{ts.get()};
-    if (t.kind != name) {
+    if (t.kind != ident) {
         Cal::error("identifier expected in declaration");
     }
-    std::string vname{t.name};
+    std::string name{t.name};
 
     Token t2{ts.get()};
     if (t2.kind != equals) {
         Cal::error("'=' missing in declaration");
     }
 
-    double temp{expression()};
-    define_name(vname, temp);
-    return temp;
+    double value{expression()};
+    define_name(name, value);
+    return value;
 }
 
 // Turn a declaration into a statement.
