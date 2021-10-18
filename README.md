@@ -2,13 +2,19 @@
 Cal is a portable, command-line interface, desk calculator.
 
 Cal supports basic arithmetic using `+`, `-`, `/`, `% ` and `*`.  It also
-supports factorials, with the `!` operator.
+supports factorials, with the `!` operator, and exponentiation, with the `^`
+operator.  Cal supports mathematical functions as rvalues.
+
+## Functions
+```
+sqrt( expression )    -- takes the square root of a number
+```
 
 ## Building
 Cal uses CMake as its build system. To build:
 ```
-    cmake -S . -B build
-    cmake --build build
+cmake -S . -B build
+cmake --build build
 ```
 ## Grammar
 The Wirth syntax notation grammar is as follows:
