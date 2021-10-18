@@ -274,6 +274,9 @@ double factor()
             Cal::error("opening '(' missing");
         }
         double temp{expression()};
+        if (temp < 0) {
+            Cal::error("domain error");
+        }
         t = ts.get();
         if (t.kind != rparen) {
             Cal::error("closing ')' missing");
