@@ -46,7 +46,7 @@ namespace Cal {
     // @brief Construct a postfix expression.
     // @pre A factor.
     // @return A postfix expression.
-    double postfix_expression();
+    double power_expression();
 
     // @brief Turn a declaration into a statement.
     // @return Either a declaration or a statement.

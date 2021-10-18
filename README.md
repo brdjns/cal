@@ -23,15 +23,15 @@ The Wirth syntax notation grammar is as follows:
         | expression "-" term .
 
     term = 
-          postfix-expression
+          power-expression
         | term "*" factor
         | term "/" factor
         | term "%" factor .
 
-    postfix-expression = 
+    power-expression = 
           factor
-        | postfix-expression "!" .
-        | postfix-expression "^" factor .
+        | power-expression "!" .
+        | power-expression "^" factor .
 
     factor =
           number
@@ -39,7 +39,8 @@ The Wirth syntax notation grammar is as follows:
         | "+" number
         | "(" expression ")"
         | "[" expression "]"
-        | "{" expression "}" .
+        | "{" expression "}"
+        | "sqrt" "(" expression ")" .
 
     number =
           floating-point-literal .

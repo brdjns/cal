@@ -80,11 +80,13 @@ enum Symbol {
     quit = 'Q',
     number = '#',
     name = '@',
+    fsqrt = 'S',
 };
 
 // Keywords.
 const std::string declkey = "let";
 const std::string quitkey = "quit";
+const std::string fsqrtkey = "sqrt";
 
 // @brief Fetch a token from the standard input.
 // @pre An ASCII character.
@@ -116,6 +118,7 @@ Token Token_stream::get()
     case bang:
     case equals:
     case caret:
+    case fsqrt:
         return Token{ch};
     case '.':
     case '0':
@@ -149,6 +152,9 @@ Token Token_stream::get()
             }
             if (str == quitkey) {
                 return Token{quit};
+            }
+            if (str == fsqrtkey) {
+                return Token{fsqrt};
             }
             return Token{name, str};
         }
@@ -261,6 +267,20 @@ double factor()
         }
         return temp;
     }
+    case fsqrt: // sqrt
+    {
+        t = ts.get();
+        if (t.kind != lparen) {
+            Cal::error("opening '(' missing");
+        }
+        double temp{expression()};
+        t = ts.get();
+        if (t.kind != rparen) {
+            Cal::error("closing ')' missing");
+        }
+        return std::sqrt(temp);
+    }
+
     // -NUM.
     case minus:
         return -factor();
@@ -279,7 +299,7 @@ double factor()
 }
 
 // Construct a postfix expression.
-double postfix_expression()
+double power_expression()
 {
     double left{factor()};
     Token t{ts.get()};
@@ -312,17 +332,17 @@ double postfix_expression()
 // Construct a term.
 double term()
 {
-    double left{postfix_expression()};
+    double left{power_expression()};
 
     while (true) {
         Token t{ts.get()};
         switch (t.kind) {
         case mul:
-            left *= postfix_expression();
+            left *= power_expression();
             break;
         case over:
         {
-            double temp{postfix_expression()};
+            double temp{power_expression()};
             if (temp == 0) {
                 Cal::error("division by zero");
             }
@@ -331,7 +351,7 @@ double term()
         }
         case mod:
         {
-            double temp{postfix_expression()};
+            double temp{power_expression()};
             if (temp == 0) {
                 Cal::error("modulo division by zero");
             }
@@ -437,7 +457,7 @@ void calculate()
             std::cout << statement() << '\n';
         }
         catch (std::runtime_error& e) {
-            std::cerr << "error: " <<  e.what() << '\n';
+            std::cerr << "error: " << e.what() << '\n';
             clean_up_mess();
         }
 }
