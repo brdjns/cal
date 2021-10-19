@@ -4,7 +4,7 @@
 
 #include "functions.h"
 
-namespace Cal {
+namespace cal {
 
     double factorial(int num)
     {

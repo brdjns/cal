@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace Cal {
+namespace cal {
 
     /// @brief Cast a wider type to a narrower type.
     template<class R, class A>

@@ -1,4 +1,4 @@
-// cal.cc: Cal, a portable desk calculator.
+// cal.cc: cal, a portable desk calculator.
 // SPDX-FileCopyrightText: © 2021 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 
@@ -179,7 +179,7 @@ Token Token_stream::get()
             }
             return Token{ident, str};
         }
-        Cal::error("invalid token");
+        cal::error("invalid token");
     }
     return Token{'?'}; // never reached
 }
@@ -225,7 +225,7 @@ double get_value(std::string variable)
             return i.value;
         }
     }
-    Cal::error("get: undefined identifier ", variable);
+    cal::error("get: undefined identifier ", variable);
     return 1;
 }
 
@@ -238,7 +238,7 @@ void set_value(std::string variable, double value)
             return;
         }
     }
-    Cal::error("set: undefined identifier ", variable);
+    cal::error("set: undefined identifier ", variable);
 }
 
 // Determine if the specified variable is declared.
@@ -266,7 +266,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rparen) {
-            Cal::error("closing ')' missing");
+            cal::error("closing ')' missing");
         }
         return temp;
     }
@@ -275,7 +275,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rbrace) {
-            Cal::error("closing '}' missing");
+            cal::error("closing '}' missing");
         }
         return temp;
     }
@@ -284,7 +284,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rbrack) {
-            Cal::error("closing ']' missing");
+            cal::error("closing ']' missing");
         }
         return temp;
     }
@@ -292,29 +292,28 @@ double factor()
     {
         t = ts.get();
         if (t.kind != lparen) {
-            Cal::error("opening '(' missing for sqrt");
+            cal::error("opening '(' missing for sqrt");
         }
         double temp{expression()};
         if (temp < 0) {
-            Cal::error("domain error");
+            cal::error("domain error");
         }
         t = ts.get();
         if (t.kind != rparen) {
-            Cal::error("closing ')' missing for sqrt");
+            cal::error("closing ')' missing for sqrt");
         }
         return std::sqrt(temp);
     }
     case f_abs: // abs
     {
-        double temp{};
         t = ts.get();
         if (t.kind != lparen) {
-            Cal::error("opening '(' missing for abs");
+            cal::error("opening '(' missing for abs");
         }
-        temp = expression();
+        double temp{expression()};
         t = ts.get();
         if (t.kind != rparen) {
-            Cal::error("closing ')' missing for abs");
+            cal::error("closing ')' missing for abs");
         }
         return std::abs(temp);
     }
@@ -329,7 +328,7 @@ double factor()
     case ident:
         return get_value(t.name);
     default:
-        Cal::error("factor expected");
+        cal::error("factor expected");
     }
 
     return 0; // never reached
@@ -345,11 +344,11 @@ double power_expression()
         switch (t.kind) {
         case bang:
         {
-            int temp = Cal::narrow_cast<int>(left);
+            int temp = cal::narrow_cast<int>(left);
             if (temp < 0) {
-                Cal::error("factorial of a negative number");
+                cal::error("factorial of a negative number");
             }
-            return left = Cal::factorial(temp);
+            return left = cal::factorial(temp);
             break;
         }
         case caret:
@@ -381,7 +380,7 @@ double term()
         {
             double temp{power_expression()};
             if (temp == 0) {
-                Cal::error("division by zero");
+                cal::error("division by zero");
             }
             left /= temp;
             break;
@@ -390,7 +389,7 @@ double term()
         {
             double temp{power_expression()};
             if (temp == 0) {
-                Cal::error("modulo division by zero");
+                cal::error("modulo division by zero");
             }
             left = std::fmod(left, temp);
             break;
@@ -429,7 +428,7 @@ double expression()
 double define_name(std::string variable, double value)
 {
     if (is_declared(variable)) {
-        Cal::error("variable declared twice");
+        cal::error("variable declared twice");
     }
     symtab.push_back(Variable{variable, value});
     return value;
@@ -440,13 +439,13 @@ double declaration()
 {
     Token t{ts.get()};
     if (t.kind != ident) {
-        Cal::error("identifier expected in declaration");
+        cal::error("identifier expected in declaration");
     }
     std::string name{t.name};
 
     Token t2{ts.get()};
     if (t2.kind != equals) {
-        Cal::error("'=' missing in declaration");
+        cal::error("'=' missing in declaration");
     }
 
     double value{expression()};

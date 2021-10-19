@@ -4,7 +4,7 @@
 
 #pragma once
 
-namespace Cal {
+namespace cal {
 
     // @brief Compute a factorial.
     // @pre num is an integer.
