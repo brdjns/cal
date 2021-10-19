@@ -7,7 +7,8 @@ operator.  Cal supports mathematical functions as rvalues.
 
 ## Functions
 ```
-sqrt( expression )    -- takes the square root of a number
+abs( expression )     -- returns the absolute value of expression
+sqrt( expression )    -- returns the square root of expression
 ```
 
 ## Building
@@ -46,6 +47,7 @@ The Wirth syntax notation grammar is as follows:
         | "(" expression ")"
         | "[" expression "]"
         | "{" expression "}"
+        | "abs" "(" expression ")"
         | "sqrt" "(" expression ")" .
 
     number =

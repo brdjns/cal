@@ -61,32 +61,50 @@ private:
 
 // Recognised scanner symbols.
 enum Symbol {
-    print = ';',
+    // lists
+    comma = ',',
+
+    // bracketing
     lparen = '(',
     rparen = ')',
     lbrace = '{',
     rbrace = '}',
-    lbracket = '[',
-    rbracket = ']',
-    mul = '*',
-    over = '/',
-    mod = '%',
+    lbrack = '[',
+    rbrack = ']',
+
+    // arithmetic operators
+    star = '*',
+    solidus = '/',
+    percent = '%',
     plus = '+',
     minus = '-',
     bang = '!',
     caret = '^',
+
+    // assignment
     equals = '=',
+
+    // keywords
     let = 'L',
     quit = 'Q',
     number = '#',
     ident = '@',
-    fsqrt = 'S',
+    f_sqrt = 'S',
+    f_abs = 'A',
+
+    // non-printing
+    eof = '\0',
+
+    // other
+    print = ';',
+    dot = '.',
 };
 
 // Keywords.
-const std::string declkey = "let";
-const std::string quitkey = "quit";
-const std::string fsqrtkey = "sqrt";
+const std::string kw_decl = "let";
+const std::string kw_quit = "quit";
+const std::string kw_sqrt = "sqrt";
+const std::string kw_abs = "abs";
 
 // @brief Fetch a token from the standard input.
 // @pre An ASCII character.
@@ -108,19 +126,19 @@ Token Token_stream::get()
     case rparen:
     case lbrace:
     case rbrace:
-    case lbracket:
-    case rbracket:
-    case mul:
-    case over:
-    case mod:
+    case lbrack:
+    case rbrack:
+    case star:
+    case solidus:
+    case percent:
     case plus:
     case minus:
     case bang:
     case equals:
     case caret:
-    case fsqrt:
+    case comma:
         return Token{ch};
-    case '.':
+    case dot:
     case '0':
     case '1':
     case '2':
@@ -137,7 +155,7 @@ Token Token_stream::get()
         std::cin >> value;
         return Token{number, value};
     }
-    case '\0': // ^Z
+    case eof: // ^Z
         return Token{quit};
     default:
         if (std::isalpha(ch)) {
@@ -147,14 +165,17 @@ Token Token_stream::get()
                 str += ch;
             }
             std::cin.putback(ch);
-            if (str == declkey) {
+            if (str == kw_decl) {
                 return Token{let};
             }
-            if (str == quitkey) {
+            if (str == kw_quit) {
                 return Token{quit};
             }
-            if (str == fsqrtkey) {
-                return Token{fsqrt};
+            if (str == kw_sqrt) {
+                return Token{f_sqrt};
+            }
+            if (str == kw_abs) {
+                return Token{f_abs};
             }
             return Token{ident, str};
         }
@@ -258,20 +279,20 @@ double factor()
         }
         return temp;
     }
-    case lbracket:
+    case lbrack:
     {
         double temp{expression()};
         t = ts.get();
-        if (t.kind != rbracket) {
+        if (t.kind != rbrack) {
             Cal::error("closing ']' missing");
         }
         return temp;
     }
-    case fsqrt: // sqrt
+    case f_sqrt: // sqrt
     {
         t = ts.get();
         if (t.kind != lparen) {
-            Cal::error("opening '(' missing");
+            Cal::error("opening '(' missing for sqrt");
         }
         double temp{expression()};
         if (temp < 0) {
@@ -279,11 +300,24 @@ double factor()
         }
         t = ts.get();
         if (t.kind != rparen) {
-            Cal::error("closing ')' missing");
+            Cal::error("closing ')' missing for sqrt");
         }
         return std::sqrt(temp);
     }
-
+    case f_abs: // abs
+    {
+        double temp{};
+        t = ts.get();
+        if (t.kind != lparen) {
+            Cal::error("opening '(' missing for abs");
+        }
+        temp = expression();
+        t = ts.get();
+        if (t.kind != rparen) {
+            Cal::error("closing ')' missing for abs");
+        }
+        return std::abs(temp);
+    }
     // -NUM.
     case minus:
         return -factor();
@@ -340,10 +374,10 @@ double term()
     while (true) {
         Token t{ts.get()};
         switch (t.kind) {
-        case mul:
+        case star:
             left *= power_expression();
             break;
-        case over:
+        case solidus:
         {
             double temp{power_expression()};
             if (temp == 0) {
@@ -352,7 +386,7 @@ double term()
             left /= temp;
             break;
         }
-        case mod:
+        case percent:
         {
             double temp{power_expression()};
             if (temp == 0) {
