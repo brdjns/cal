@@ -157,11 +157,12 @@ Token Token_stream::get()
     }
     case eof: // ^Z
         return Token{quit};
-    default:
+    default: // idenitifers
         if (std::isalpha(ch)) {
             std::string str;
             str += ch;
-            while (std::cin.get(ch) && (std::isalpha(ch) || std::isdigit(ch))) {
+            while (std::cin.get(ch) &&
+                   (std::isalpha(ch) || ch == '_' || std::isdigit(ch))) {
                 str += ch;
             }
             std::cin.putback(ch);
