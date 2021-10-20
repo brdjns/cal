@@ -289,11 +289,11 @@ double factor()
         }
         return temp;
     }
-    case f_sqrt: // sqrt
+    case f_sqrt: // sqrt(a)
     {
         t = ts.get();
         if (t.kind != lparen) {
-            cal::error("opening '(' missing for sqrt");
+            cal::error("opening '(' missing");
         }
         double temp{expression()};
         if (temp < 0) {
@@ -301,32 +301,30 @@ double factor()
         }
         t = ts.get();
         if (t.kind != rparen) {
-            cal::error("closing ')' missing for sqrt");
+            cal::error("closing ')' missing");
         }
         return std::sqrt(temp);
     }
-    case f_abs: // abs
+    case f_abs: // |a|
     {
         t = ts.get();
         if (t.kind != lparen) {
-            cal::error("opening '(' missing for abs");
+            cal::error("opening '('");
         }
         double temp{expression()};
         t = ts.get();
         if (t.kind != rparen) {
-            cal::error("closing ')' missing for abs");
+            cal::error("closing ')' missing ");
         }
         return std::abs(temp);
     }
-    // -NUM.
-    case minus:
+    case minus: // -a
         return -factor();
-    // +NUM.
-    case plus:
+    case plus: // +a
         return factor();
-    case number:
+    case number: // [.0-9]
         return t.value;
-    case ident:
+    case ident: // [a-zA-Z_]
         return get_value(t.name);
     default:
         cal::error("factor expected");
@@ -335,7 +333,7 @@ double factor()
     return 0; // never reached
 }
 
-// Construct a postfix expression.
+// Construct a power expression.
 double power_expression()
 {
     double left{factor()};
@@ -343,7 +341,7 @@ double power_expression()
 
     while (true) {
         switch (t.kind) {
-        case bang:
+        case bang: // a!
         {
             int temp = cal::narrow_cast<int>(left);
             if (temp < 0) {
@@ -352,7 +350,7 @@ double power_expression()
             return left = cal::factorial(temp);
             break;
         }
-        case caret:
+        case caret: // a^b
         {
             double temp{factor()};
             return left = std::pow(left, temp);
@@ -374,10 +372,10 @@ double term()
     while (true) {
         Token t{ts.get()};
         switch (t.kind) {
-        case star:
+        case star: // a*b
             left *= power_expression();
             break;
-        case solidus:
+        case solidus: // a/b
         {
             double temp{power_expression()};
             if (temp == 0) {
@@ -386,7 +384,7 @@ double term()
             left /= temp;
             break;
         }
-        case percent:
+        case percent: // a%b is defined for floats
         {
             double temp{power_expression()};
             if (temp == 0) {
@@ -410,11 +408,11 @@ double expression()
 
     while (true) {
         switch (t.kind) {
-        case plus:
+        case plus: // a+b
             left += term();
             t = ts.get();
             break;
-        case minus:
+        case minus: // a-b
             left -= term();
             t = ts.get();
             break;
