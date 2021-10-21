@@ -264,9 +264,9 @@ Symbol_table names;
 // Retrieve a variable's value.
 double Symbol_table::get(std::string var)
 {
-    for (size_t i = 0; i < names.var_table.size(); ++i) {
-        if (names.var_table[i].name == var) {
-            return names.var_table[i].value;
+    for (Variable& i : names.var_table) {
+        if (i.name == var) {
+            return i.value;
         }
     }
     cal::error(var, " is undefined");
@@ -501,7 +501,7 @@ double assignment()
     std::string name{t.name};
 
     Token t2 = ts.get();
-    if (t2.kind != '=') {
+    if (t2.kind != equals) {
         cal::error("'=' missing in assignment of ", name);
     }
     double value{expression()};
