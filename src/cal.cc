@@ -105,6 +105,7 @@ enum Symbol {
 // Keywords.
 const std::string kw_decl = "let";
 const std::string kw_quit = "quit";
+const std::string kw_exit = "exit";
 const std::string kw_sqrt = "sqrt";
 
 // @brief Fetch a token from the standard input.
@@ -171,7 +172,7 @@ Token Token_stream::get()
             if (str == kw_decl) {
                 return Token{let};
             }
-            if (str == kw_quit) {
+            if (str == kw_quit || str == kw_exit) {
                 return Token{quit};
             }
             if (str == kw_sqrt) {
