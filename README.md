@@ -8,7 +8,33 @@ assignment and declaration.  Internally, Cal uses double-precision
 floating-point arithmetic for most operations, and integer arithmetic
 for operations that are defined only for integers.
 
+## Operators
+Operator precedence is as follows:
+```
+-------------------------------------------------------------------------------
+ priority       operator        description                      associativity
+-------------------------------------------------------------------------------
+ 1              +a -a           unary plus and minus                      left
+                a()             function call
+                (a)             bracketed expression
+                {a}
+                [a]
+                a!              factorial
+                |a|             absolute value
+-------------------------------------------------------------------------------
+ 2              a!              factorial                                right
+                a^b             exponentiation
+-------------------------------------------------------------------------------
+ 3              a*b a/b a%b     multiplication, division, remainder       left
+
+ 4              a+b a-b         addition, subtraction
+-------------------------------------------------------------------------------
+ 5              a=b             assignment, initialisation               right
+-------------------------------------------------------------------------------
+```
+
 ## Functions
+Cal implements the following mathematical functions:
 ```
 sqrt( expression )    -- returns the square root of expression
 ```
@@ -67,7 +93,7 @@ The Wirth syntax notation grammar is as follows:
         | "(" expression ")"
         | "[" expression "]"
         | "{" expression "}"
-        | "abs" "(" expression ")"
+        | "|" expression "|"
         | "sqrt" "(" expression ")" .
 
     number =
