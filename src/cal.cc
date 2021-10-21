@@ -73,7 +73,7 @@ enum Symbol {
 
     // arithmetic operators
     star = '*',
-    solidus = '/',
+    slash = '/',
     percent = '%',
     plus = '+',
     minus = '-',
@@ -132,7 +132,7 @@ Token Token_stream::get()
     case rbrack:
     case bar:
     case star:
-    case solidus:
+    case slash:
     case percent:
     case plus:
     case minus:
@@ -424,7 +424,7 @@ double term()
         case star: // a*b
             left *= power_expression();
             break;
-        case solidus: // a/b
+        case slash: // a/b
         {
             double temp{power_expression()};
             if (temp == 0) {
