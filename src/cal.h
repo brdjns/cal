@@ -52,27 +52,27 @@ namespace cal {
     // @return Either a declaration or a statement.
     double statement();
 
-    // @brief Declare a variable.
+    // @brief Parse declaration statements.
     // @throws runtime_error if the variable name is missing in a declaration.
     // @throws runtime_error if '=' is missing in a declaration.
     // @return an expression that is the value of the variable.
     double declaration();
 
     // @brief Add a variable to the symbol table.
-    // @param variable a variable.
-    // @param value the variable's value.
+    // @param var a variable.
+    // @param val the variable's value.
     // @throws runtime_error if the variable is already declared.
     // @return the variable's value.
     double define_name(std::string variable, double value);
 
     // @brief Bind a value to an identifier.
-    // @param variable a variable identifier string.
-    // @param value a numeric value.
+    // @param var a variable identifier string.
+    // @param val a numeric value.
     // @throws std::runtume_error if str is undefined.
     void set_value(std::string variable, double value);
 
     // @brief Retrieve a variable's value.
-    // @param variable a variable identifier.
+    // @param var a variable identifier.
     // @throws runtume_error if the variable is undefined.
     // @return the variable's value.
     double get_value(std::string variable);
@@ -85,9 +85,22 @@ namespace cal {
     void clean_up_mess();
 
     // @brief Determine if the specified variable is declared.
-    // @param variable the variable identifier to be tested.
+    // @param var the variable identifier to be tested.
     // @return true if the variable is declared; false otherwise.
     bool is_declared(std::string variable);
+
+    // @brief Assign a new value to a variable.
+    // @param var a variable identifier.
+    // @param val a value
+    // @throws runtume_error if the variable is undefined.
+    // @return the variable's value.
+    double assign_name(std::string var, double val);
+
+    // @brief Parse assignment expressions.
+    // @param var a variable identifier.
+    // @throws runtume_error if the variable is undefined.
+    // @return the variable's value.
+    double assignment();
 
     // @brief Throw a runtime exception.
     // @param message an error message.

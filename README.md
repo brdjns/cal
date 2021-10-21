@@ -3,11 +3,13 @@ Cal is a portable, command-line interface, desk calculator.
 
 Cal supports basic arithmetic using `+`, `-`, `/`, `% ` and `*`.  It also
 supports factorials, with the `!` operator, and exponentiation, with the `^`
-operator.  Cal supports mathematical functions as rvalues.
+operator.  Cal supports mathematical functions as rvalues, and variable
+assignment and declaration.  Internally, Cal uses double-precision
+floating-point arithmetic for most operations, and integer arithmetic
+for operations that are defined only for integers.
 
 ## Functions
 ```
-abs( expression )     -- returns the absolute value of expression
 sqrt( expression )    -- returns the square root of expression
 ```
 
@@ -20,14 +22,18 @@ cmake --build build
 ## Grammar
 The Wirth syntax notation grammar is as follows:
 ```
-    declaration =
-          "let" "=" expression .
+    statement = 
+          expression ";" .
 
     expression =
           declaration
         | term
         | expression "+" term
         | expression "-" term .
+
+    declaration =
+          "let" "=" expression
+          "set" "=" expression .
 
     term = 
           power-expression

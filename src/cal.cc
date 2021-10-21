@@ -87,12 +87,13 @@ enum Symbol {
 
     // general keywords
     let = 'L',
+    set = 'S',
     quit = 'Q',
     number = '#',
     ident = '@',
 
     // function keywords
-    f_sqrt = 'S',
+    f_sqrt = 'R',
 
     // non-printing
     eof = '\0',
@@ -104,6 +105,7 @@ enum Symbol {
 
 // Keywords.
 const std::string kw_decl = "let";
+const std::string kw_assn = "set";
 const std::string kw_quit = "quit";
 const std::string kw_exit = "exit";
 const std::string kw_sqrt = "sqrt";
@@ -172,6 +174,9 @@ Token Token_stream::get()
             if (str == kw_decl) {
                 return Token{let};
             }
+            if (str == kw_assn) {
+                return Token{set};
+            }
             if (str == kw_quit || str == kw_exit) {
                 return Token{quit};
             }
@@ -180,7 +185,7 @@ Token Token_stream::get()
             }
             return Token{ident, str};
         }
-        cal::error("invalid token");
+        cal::error("unrecognized token");
     }
     return Token{'?'}; // never reached
 }
@@ -219,34 +224,34 @@ public:
 std::vector<Variable> symtab;
 
 // Retrieve a variable's value.
-double get_value(std::string variable)
+double get_value(std::string var)
 {
     for (Variable& i : symtab) {
-        if (i.name == variable) {
+        if (i.name == var) {
             return i.value;
         }
     }
-    cal::error("get: undefined identifier ", variable);
+    cal::error(var, " is undefined");
     return 1;
 }
 
 // Bind a value to a variable.
-void set_value(std::string variable, double value)
+void set_value(std::string var, double val)
 {
     for (Variable& i : symtab) {
-        if (i.name == variable) {
-            i.value = value;
+        if (i.name == var) {
+            i.value = val;
             return;
         }
     }
-    cal::error("set: undefined identifier ", variable);
+    cal::error(var, " is undefined");
 }
 
 // Determine if the specified variable is declared.
-bool is_declared(std::string variable)
+bool is_declared(std::string var)
 {
     for (Variable& i : symtab) {
-        if (i.name == variable) {
+        if (i.name == var) {
             return true;
         }
     }
@@ -267,7 +272,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rparen) {
-            cal::error("closing ')' missing");
+            cal::error("')' missing in expression");
         }
         return temp;
     }
@@ -276,7 +281,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rbrace) {
-            cal::error("closing '}' missing");
+            cal::error("'}' missing in expression");
         }
         return temp;
     }
@@ -285,7 +290,7 @@ double factor()
         double temp{expression()};
         t = ts.get();
         if (t.kind != rbrack) {
-            cal::error("closing ']' missing");
+            cal::error("']' missing in expression");
         }
         return temp;
     }
@@ -293,7 +298,7 @@ double factor()
     {
         t = ts.get();
         if (t.kind != lparen) {
-            cal::error("opening '(' missing");
+            cal::error("'(' missing in expression");
         }
         double temp{expression()};
         if (temp < 0) {
@@ -301,7 +306,7 @@ double factor()
         }
         t = ts.get();
         if (t.kind != rparen) {
-            cal::error("closing ')' missing");
+            cal::error("')' missing in expression");
         }
         return std::sqrt(temp);
     }
@@ -310,7 +315,7 @@ double factor()
         double temp = expression();
         t = ts.get();
         if (t.kind != bar) {
-            cal::error("'|' missing");
+            cal::error("'|' missing in expression");
         }
         return std::abs(temp);
     }
@@ -341,7 +346,7 @@ double power_expression()
         {
             int temp = cal::narrow_cast<int>(left);
             if (temp < 0) {
-                cal::error("factorial of a negative number");
+                cal::error("domain error");
             }
             return left = cal::factorial(temp);
             break;
@@ -420,13 +425,13 @@ double expression()
 }
 
 // Add a variable to the symbol table.
-double define_name(std::string variable, double value)
+double define_name(std::string var, double val)
 {
-    if (is_declared(variable)) {
-        cal::error("variable declared twice");
+    if (is_declared(var)) {
+        cal::error(var, " is defined");
     }
-    symtab.push_back(Variable{variable, value});
-    return value;
+    symtab.push_back(Variable{var, val});
+    return val;
 }
 
 // Declare a variable.
@@ -434,18 +439,53 @@ double declaration()
 {
     Token t{ts.get()};
     if (t.kind != ident) {
-        cal::error("identifier expected in declaration");
+        cal::error("identifier missing in declaration");
     }
     std::string name{t.name};
 
     Token t2{ts.get()};
     if (t2.kind != equals) {
-        cal::error("'=' missing in declaration");
+        cal::error("'=' missing in declaration of ", name);
     }
 
     double value{expression()};
     define_name(name, value);
     return value;
+}
+
+double assign_name(std::string var, double val);
+
+// Deal with assignments.
+double assignment()
+{
+    Token t{ts.get()};
+    if (t.kind != ident) {
+        cal::error("identifier missing in assignment");
+    }
+    std::string name{t.name};
+
+    Token t2 = ts.get();
+    if (t2.kind != '=') {
+        cal::error("'=' missing in assignment of ", name);
+    }
+    double value{expression()};
+    assign_name(name, value);
+    return value;
+}
+
+// Assign a new value to a variable.
+double assign_name(std::string var, double val)
+{
+    if (!is_declared(var)) {
+        cal::error(var, " is undefined");
+    }
+    
+    for (Variable& i : symtab) {
+        if (var == i.name) {
+            i.value = val;
+        }
+    }
+    return val;
 }
 
 // Turn a declaration into a statement.
@@ -455,6 +495,8 @@ double statement()
     switch (t.kind) {
     case let:
         return declaration();
+    case set:
+        return assignment();
     default:
         ts.putback(t);
         return expression();
