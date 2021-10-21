@@ -13,6 +13,20 @@ for operations that are defined only for integers.
 sqrt( expression )    -- returns the square root of expression
 ```
 
+## Predefined constants
+The following constants are predefined:
+```
+E           2.71828182845904523536    e (Euler's number)
+LOG2E       1.44269504088896340736    log2(e)
+LOG10E      0.434294481903251827651   log10(e)
+LN2         0.693147180559945309417   ln(2)
+LN10        2.30258509299404568402    ln(10)
+PI          3.14159265358979323846    π
+PI_2        1.57079632679489661923    π÷2
+PI_4        0.785398163397448309616   π÷4
+SQRT2       1.41421356237309504880    √2
+```
+
 ## Building
 Cal uses CMake as its build system. To build:
 ```
