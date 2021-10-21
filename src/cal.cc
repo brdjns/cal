@@ -15,17 +15,17 @@ public:
     std::string name; // an identifier name
 
     // @brief Construct a token from a character.
-    // @param[in] ch a kind
+    // @param[in] ch a kind.
     Token(char ch) : kind{ch}, value{0} {}
 
     // @brief Construct a token from a character and value.
-    // @param[in] ch a kind
-    // @param[in] val a value
+    // @param[in] ch a kind.
+    // @param[in] val a value.
     Token(char ch, double val) : kind{ch}, value{val} {}
 
     // @brief Construct a token from a character and name.
-    // @param[in] ch a kind
-    // @param[in] n an identifier
+    // @param[in] ch a kind.
+    // @param[in] n an identifier.
     Token(char ch, std::string id) : kind{ch}, name{id} {}
 };
 
@@ -41,9 +41,7 @@ public:
     Token get();
 
     // @brief Put a token back into the token stream.
-    // @param t A token
-    // @pre There is no token in the buffer.
-    // @post The buffer is full.
+    // @param[in] t a token.
     void putback(Token t)
     {
         buffer = t;
@@ -51,7 +49,7 @@ public:
     }
 
     // @brief Discard characters up to and including a c.
-    // @param ch character to ignore
+    // @param[in] c character to ignore.
     void ignore(char c);
 
 private:
@@ -112,8 +110,8 @@ const std::string kw_sqrt = "sqrt";
 
 // @brief Fetch a token from the standard input.
 // @pre An ASCII character.
-// @post Return a token.
-// @throws runtime_error if token is not alphanumeric or an operator.
+// @returns A token.
+// @throws std::runtime_error if token is not alphanumeric or an operator.
 Token Token_stream::get()
 {
     if (full) {
@@ -162,7 +160,7 @@ Token Token_stream::get()
     }
     case eof: // ^Z
         return Token{quit};
-    default: // idenitifers
+    default: // identifiers
         if (std::isalpha(ch)) {
             std::string str;
             str += ch;
@@ -191,7 +189,7 @@ Token Token_stream::get()
 }
 
 // @brief Discard characters up to and including a c.
-// @param c a character to ignore
+// @param c a character to ignore.
 void Token_stream::ignore(char c)
 {
     if (full && c == buffer.kind) {
@@ -213,32 +211,72 @@ class Variable {
 public:
     std::string name; // a variable identifier
     double value;     // a variable value
+    bool is_const;    // true if variable is a constant
 
     // @brief Construct a variable with a name and value.
-    // @param[in] id a variable identifier
-    // @param[in] v a variable value
+    // @param[in] id a variable identifier.
+    // @param[in] v a variable value.
     Variable(std::string id, double v) : name{id}, value{v} {}
+
+    // @brief Construct a variable with a name and value.
+    // @param[in] id a variable identifier.
+    // @param[in] v a variable value.
+    // @param[in] b true if b is a constant.
+    Variable(std::string id, double v, bool b)
+        : name{id}, value{v}, is_const{false}
+    {}
 };
 
-// A symbol table of variables.
-std::vector<Variable> symtab;
+// @class Symbol_table
+// @brief A symbol table type.
+class Symbol_table {
+public:
+    std::vector<Variable> var_table; // table of variables
+
+    // @brief Retrieve a variable's value.
+    // @param[in] var a variable identifier.
+    // @throws std::runtime_error if the variable is undefined.
+    // @return the variable's value.
+    double get(std::string var);
+
+    // @brief Assign a new value to a variable.
+    // @param[in] var a variable identifier.
+    // @param[in] val a value.
+    // @throws std::runtime_error if the variable is undefined.
+    void set(std::string var, double val);
+
+    // @brief Determine if the specified variable is declared.
+    // @param[in] var the variable identifier to be tested.
+    // @returns true if the variable is declared; false otherwise.
+    bool is_declared(std::string var);
+
+    // @brief Add a variable to the symbol table.
+    // @param[in] var a variable identifier.
+    // @param[in] val a value.
+    double declare(std::string var, double val);
+
+    // @brief Construct a symbol table.
+    Symbol_table() {}
+};
+
+Symbol_table names;
 
 // Retrieve a variable's value.
-double get_value(std::string var)
+double Symbol_table::get(std::string var)
 {
-    for (Variable& i : symtab) {
-        if (i.name == var) {
-            return i.value;
+    for (size_t i = 0; i < names.var_table.size(); ++i) {
+        if (names.var_table[i].name == var) {
+            return names.var_table[i].value;
         }
     }
     cal::error(var, " is undefined");
     return 1;
 }
 
-// Bind a value to a variable.
-void set_value(std::string var, double val)
+// Assign a new value to a variable.
+void Symbol_table::set(std::string var, double val)
 {
-    for (Variable& i : symtab) {
+    for (Variable& i : names.var_table) {
         if (i.name == var) {
             i.value = val;
             return;
@@ -248,14 +286,24 @@ void set_value(std::string var, double val)
 }
 
 // Determine if the specified variable is declared.
-bool is_declared(std::string var)
+bool Symbol_table::is_declared(std::string var)
 {
-    for (Variable& i : symtab) {
+    for (Variable& i : names.var_table) {
         if (i.name == var) {
             return true;
         }
     }
     return false;
+}
+
+// Add a variable to the symbol table.
+double Symbol_table::declare(std::string var, double val)
+{
+    if (names.is_declared(var)) {
+        cal::error(var, " is defined");
+    }
+    names.var_table.push_back(Variable{var, val});
+    return val;
 }
 
 double expression();
@@ -326,7 +374,7 @@ double factor()
     case number: // [.0-9]
         return t.value;
     case ident: // [a-zA-Z_]
-        return get_value(t.name);
+        return names.get(t.name);
     default:
         cal::error("factor expected");
     }
@@ -424,16 +472,6 @@ double expression()
     }
 }
 
-// Add a variable to the symbol table.
-double define_name(std::string var, double val)
-{
-    if (is_declared(var)) {
-        cal::error(var, " is defined");
-    }
-    symtab.push_back(Variable{var, val});
-    return val;
-}
-
 // Declare a variable.
 double declaration()
 {
@@ -449,11 +487,9 @@ double declaration()
     }
 
     double value{expression()};
-    define_name(name, value);
+    names.declare(name, value);
     return value;
 }
-
-double assign_name(std::string var, double val);
 
 // Deal with assignments.
 double assignment()
@@ -469,23 +505,8 @@ double assignment()
         cal::error("'=' missing in assignment of ", name);
     }
     double value{expression()};
-    assign_name(name, value);
+    names.set(name, value);
     return value;
-}
-
-// Assign a new value to a variable.
-double assign_name(std::string var, double val)
-{
-    if (!is_declared(var)) {
-        cal::error(var, " is undefined");
-    }
-    
-    for (Variable& i : symtab) {
-        if (var == i.name) {
-            i.value = val;
-        }
-    }
-    return val;
 }
 
 // Turn a declaration into a statement.
@@ -493,9 +514,9 @@ double statement()
 {
     Token t{ts.get()};
     switch (t.kind) {
-    case let:
+    case let: // declaration
         return declaration();
-    case set:
+    case set: // assignment
         return assignment();
     default:
         ts.putback(t);
@@ -538,15 +559,15 @@ void calculate()
 int main()
 try {
     // Predefined constants.
-    define_name("E", 2.71828182845904523536);       // e
-    define_name("LOG2E", 1.44269504088896340736);   // log2(e)
-    define_name("LOG10E", 0.434294481903251827651); // log10(e)
-    define_name("LN2", 0.693147180559945309417);    // ln(2)
-    define_name("LN10", 2.30258509299404568402);    // ln(10)
-    define_name("PI", 3.14159265358979323846);      // pi
-    define_name("PI_2", 1.57079632679489661923);    // pi/2
-    define_name("PI_4", 0.785398163397448309616);   // pi/4
-    define_name("SQRT2", 1.41421356237309504880);   // sqrt(2)
+    names.declare("E", 2.71828182845904523536);       // e
+    names.declare("LOG2E", 1.44269504088896340736);   // log2(e)
+    names.declare("LOG10E", 0.434294481903251827651); // log10(e)
+    names.declare("LN2", 0.693147180559945309417);    // ln(2)
+    names.declare("LN10", 2.30258509299404568402);    // ln(10)
+    names.declare("PI", 3.14159265358979323846);      // pi
+    names.declare("PI_2", 1.57079632679489661923);    // pi/2
+    names.declare("PI_4", 0.785398163397448309616);   // pi/4
+    names.declare("SQRT2", 1.41421356237309504880);   // sqrt(2)
 
     calculate();
     return EXIT_SUCCESS;

@@ -34,18 +34,18 @@ namespace cal {
     // @brief Construct a term.
     // @pre A factor.
     // @return A term.
-    // @throws runtime_error for division by zero.
+    // @throws std::runtime_error for division by zero.
     double term();
 
     // @brief Construct a factor.
     // @pre A token that is a number or parentheses.
     // @return A factor.
-    // @throws runtime_error if next token is not an expression.
+    // @throws std::runtime_error if next token is not an expression.
     double factor();
 
-    // @brief Construct a postfix expression.
+    // @brief Construct a power expression.
     // @pre A factor.
-    // @return A postfix expression.
+    // @return A power expression.
     double power_expression();
 
     // @brief Turn a declaration into a statement.
@@ -53,29 +53,10 @@ namespace cal {
     double statement();
 
     // @brief Parse declaration statements.
-    // @throws runtime_error if the variable name is missing in a declaration.
-    // @throws runtime_error if '=' is missing in a declaration.
+    // @throws std::runtime_error if the variable name is missing in a declaration.
+    // @throws std::runtime_error if '=' is missing in a declaration.
     // @return an expression that is the value of the variable.
     double declaration();
-
-    // @brief Add a variable to the symbol table.
-    // @param var a variable.
-    // @param val the variable's value.
-    // @throws runtime_error if the variable is already declared.
-    // @return the variable's value.
-    double define_name(std::string variable, double value);
-
-    // @brief Bind a value to an identifier.
-    // @param var a variable identifier string.
-    // @param val a numeric value.
-    // @throws std::runtume_error if str is undefined.
-    void set_value(std::string variable, double value);
-
-    // @brief Retrieve a variable's value.
-    // @param var a variable identifier.
-    // @throws runtume_error if the variable is undefined.
-    // @return the variable's value.
-    double get_value(std::string variable);
 
     // @brief Compute an expression.
     // @return An expression.
@@ -84,50 +65,37 @@ namespace cal {
     // @brief Clean up remaining tokens during an exception.
     void clean_up_mess();
 
-    // @brief Determine if the specified variable is declared.
-    // @param var the variable identifier to be tested.
-    // @return true if the variable is declared; false otherwise.
-    bool is_declared(std::string variable);
-
-    // @brief Assign a new value to a variable.
-    // @param var a variable identifier.
-    // @param val a value
-    // @throws runtume_error if the variable is undefined.
-    // @return the variable's value.
-    double assign_name(std::string var, double val);
-
     // @brief Parse assignment expressions.
     // @param var a variable identifier.
-    // @throws runtume_error if the variable is undefined.
+    // @throws std::runtime_error if the variable is undefined.
     // @return the variable's value.
     double assignment();
 
     // @brief Throw a runtime exception.
-    // @param message an error message.
-    // @throws runtime_error when called.
-    inline void error(const std::string& message)
+    // @param msg an error message.
+    // @throws std::runtime_error when called.
+    inline void error(const std::string& msg)
     {
-        throw std::runtime_error(message);
+        throw std::runtime_error(msg);
     }
 
     // @brief Throw a runtime exception.
-    // @param message an error message.
-    // @param message2 a string to append to the error message.
-    // @throws runtime_error when called.
-    inline void error(const std::string& message, const std::string& message2)
+    // @param msg an error message.
+    // @param msg2 a message to append.
+    // @throws std::runtime_error when called.
+    inline void error(const std::string& msg, const std::string& msg2)
     {
-        error(message + message2);
+        error(msg + msg2);
     }
 
     // @brief Throw a runtime exception.
-    // @param message an error message.
-    // @param value a character value.
-    // @throws runtime_error when called.
-    inline void error(const std::string& message, int value)
+    // @param msg an error message.
+    // @param val a character value.
+    // @throws std::runtime_error when called.
+    inline void error(const std::string& msg, int val)
     {
         std::ostringstream os;
-        os << message << ": " << value;
+        os << msg << ": " << val;
         error(os.str());
     }
-
 }
