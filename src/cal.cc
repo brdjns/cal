@@ -71,6 +71,7 @@ enum Symbol {
     rbrace = '}',
     lbrack = '[',
     rbrack = ']',
+    bar = '|',
 
     // arithmetic operators
     star = '*',
@@ -84,13 +85,14 @@ enum Symbol {
     // assignment
     equals = '=',
 
-    // keywords
+    // general keywords
     let = 'L',
     quit = 'Q',
     number = '#',
     ident = '@',
+    
+    // function keywords
     f_sqrt = 'S',
-    f_abs = 'A',
 
     // non-printing
     eof = '\0',
@@ -104,7 +106,6 @@ enum Symbol {
 const std::string kw_decl = "let";
 const std::string kw_quit = "quit";
 const std::string kw_sqrt = "sqrt";
-const std::string kw_abs = "abs";
 
 // @brief Fetch a token from the standard input.
 // @pre An ASCII character.
@@ -128,6 +129,7 @@ Token Token_stream::get()
     case rbrace:
     case lbrack:
     case rbrack:
+    case bar:
     case star:
     case solidus:
     case percent:
@@ -174,9 +176,6 @@ Token Token_stream::get()
             }
             if (str == kw_sqrt) {
                 return Token{f_sqrt};
-            }
-            if (str == kw_abs) {
-                return Token{f_abs};
             }
             return Token{ident, str};
         }
@@ -305,16 +304,12 @@ double factor()
         }
         return std::sqrt(temp);
     }
-    case f_abs: // |a|
+    case bar: // |a|
     {
+        double temp = expression();
         t = ts.get();
-        if (t.kind != lparen) {
-            cal::error("opening '('");
-        }
-        double temp{expression()};
-        t = ts.get();
-        if (t.kind != rparen) {
-            cal::error("closing ')' missing ");
+        if (t.kind != bar) { 
+            cal::error("'|' missing");
         }
         return std::abs(temp);
     }
