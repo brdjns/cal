@@ -80,7 +80,7 @@ enum Symbol {
     bang = '!',
     caret = '^',
 
-    // assignment
+    // assignment and initialisation
     equals = '=',
 
     // general keywords
@@ -90,7 +90,7 @@ enum Symbol {
     number = '#',
     ident = '@',
 
-    // function keywords
+    // function operators
     f_sqrt = 'R',
 
     // non-printing
