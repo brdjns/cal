@@ -92,7 +92,7 @@ enum Symbol {
     ident = '@',
 
     // function operators
-    f_sqrt = 'R',
+    sq_rt = 'R',
 
     // non-printing
     eof = '\0',

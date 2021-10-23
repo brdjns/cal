@@ -44,7 +44,7 @@ double factor()
         }
         return temp;
     }
-    case f_sqrt: // sqrt(a)
+    case sq_rt: // sqrt(a)
     {
         t = ts.get();
         if (t.kind != lparen) {
@@ -216,9 +216,9 @@ double statement()
 {
     Token t{ts.get()};
     switch (t.kind) {
-    case let: // declaration
+    case let:
         return declaration();
-    case set: // assignment
+    case set:
         return assignment();
     default:
         ts.putback(t);

@@ -76,7 +76,7 @@ Token Token_stream::get()
                 return Token{quit};
             }
             if (str == kw_sqrt) {
-                return Token{f_sqrt};
+                return Token{sq_rt};
             }
             return Token{ident, str};
         }
