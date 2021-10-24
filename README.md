@@ -3,13 +3,12 @@ Cal is a portable, command-line interface, desk calculator.
 
 Cal supports basic arithmetic using `+`, `-`, `/`, `% ` and `*`.  It also
 supports factorials, with the `!` operator, and exponentiation, with the `^`
-operator.  Cal supports mathematical functions as rvalues, and variable
-assignment and declaration.  Internally, Cal uses double-precision
-floating-point arithmetic for most operations, and integer arithmetic
-for operations that are defined only for integers.
+operator.  Cal supports mathematical functions as rvalues, variable assignment
+and variable declaration.  Internally, Cal uses double-precision floating-point
+arithmetic for most operations, and integer arithmetic for operations that are
+defined only for integers.
 
-## Operators
-Operator precedence is as follows:
+## Operator priority
 ```
 -------------------------------------------------------------------------------
  priority       operator        description                      associativity
@@ -34,7 +33,6 @@ Operator precedence is as follows:
 ```
 
 ## Functions
-Cal implements the following mathematical functions:
 ```
 sqrt( expression )    # return the square root of expression
 ```
@@ -44,30 +42,29 @@ sqrt( expression )    # return the square root of expression
 let         # initialise
 set         # assign
 sqrt()      # square root
-exit        # exit cal
-quit        # exit cal
+exit        # exit
+quit        # exit
 ```
 
 ## Predefined constants
-The following constants are predefined:
 ```
-E           2.71828182845904523536    e (Euler's number)
-LOG2E       1.44269504088896340736    log2(e)
-LOG10E      0.434294481903251827651   log10(e)
-LN2         0.693147180559945309417   ln(2)
-LN10        2.30258509299404568402    ln(10)
-PI          3.14159265358979323846    π
-PI_2        1.57079632679489661923    π÷2
-PI_4        0.785398163397448309616   π÷4
-SQRT2       1.41421356237309504880    √2
+E           2.71828182845904523536    # e (Euler's number)
+LOG2E       1.44269504088896340736    # log2(e)
+LOG10E      0.434294481903251827651   # log10(e)
+LN2         0.693147180559945309417   # ln(2)
+LN10        2.30258509299404568402    # ln(10)
+PI          3.14159265358979323846    # π
+PI_2        1.57079632679489661923    # π÷2
+PI_4        0.785398163397448309616   # π÷4
+SQRT2       1.41421356237309504880    # √2
 ```
 
 ## Usage
-All statements are terminated by `;`.  The grouping operators `[]`, `{}`, 
-and `()` all mean the same thing and exist as a way to easily distinguish
-complex expression nesting.  Expressions can span multiple lines.  An
-expression will not be evaluated until the statement terminator `;` and
-`RET` are typed.
+All statements are terminated with `;`.  The grouping operators `[]`, `{}`, and
+`()` all mean the same thing and exist as a way to easily distinguish complex
+expression nesting.  Expressions can span multiple lines.  An expression will
+not be evaluated until the statement terminator `;` and `RET` are typed.  A
+typical session:
 ```
 > let x = 2.5;                    # initialise x with 2.5
 2.5
@@ -113,13 +110,11 @@ exit                              # quits cal; note: quit is a synonym
 ```
 
 ## Building
-Cal uses CMake as its build system. To build:
 ```
 cmake -S . -B build
 cmake --build build
 ```
 ## Grammar
-The Wirth syntax notation grammar is as follows:
 ```
     statement = 
           expression ";" .
