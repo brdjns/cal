@@ -8,18 +8,17 @@
 #include "token.h"
 
 Symbol_table names;
-Token_stream ts;
-double expression();
+double expression(Token_stream& ts);
 
 // Construct a factor.
-double factor()
+double factor(Token_stream& ts)
 {
     Token t{ts.get()};
 
     switch (t.kind) {
     case lparen:
     {
-        double temp{expression()};
+        double temp{expression(ts)};
         t = ts.get();
         if (t.kind != rparen) {
             error("')' missing in expression");
@@ -28,7 +27,7 @@ double factor()
     }
     case lbrace:
     {
-        double temp{expression()};
+        double temp{expression(ts)};
         t = ts.get();
         if (t.kind != rbrace) {
             error("'}' missing in expression");
@@ -37,7 +36,7 @@ double factor()
     }
     case lbrack:
     {
-        double temp{expression()};
+        double temp{expression(ts)};
         t = ts.get();
         if (t.kind != rbrack) {
             error("']' missing in expression");
@@ -50,7 +49,7 @@ double factor()
         if (t.kind != lparen) {
             error("'(' missing in expression");
         }
-        double temp{expression()};
+        double temp{expression(ts)};
         if (temp < 0) {
             error("domain error");
         }
@@ -62,7 +61,7 @@ double factor()
     }
     case bar: // |a|
     {
-        double temp = expression();
+        double temp = expression(ts);
         t = ts.get();
         if (t.kind != bar) {
             error("'|' missing in expression");
@@ -70,9 +69,9 @@ double factor()
         return std::abs(temp);
     }
     case minus: // -a
-        return -factor();
+        return -factor(ts);
     case plus: // +a
-        return factor();
+        return factor(ts);
     case number: // [.0-9]
         return t.value;
     case ident: // [a-zA-Z_]
@@ -85,9 +84,9 @@ double factor()
 }
 
 // Construct a power expression.
-double power_expression()
+double power_expression(Token_stream& ts)
 {
-    double left{factor()};
+    double left{factor(ts)};
     Token t{ts.get()};
 
     while (true) {
@@ -103,7 +102,7 @@ double power_expression()
         }
         case caret: // a^b
         {
-            double temp{factor()};
+            double temp{factor(ts)};
             return left = std::pow(left, temp);
             t = ts.get();
             break;
@@ -116,19 +115,19 @@ double power_expression()
 }
 
 // Construct a term.
-double term()
+double term(Token_stream& ts)
 {
-    double left{power_expression()};
+    double left{power_expression(ts)};
 
     while (true) {
         Token t{ts.get()};
         switch (t.kind) {
         case star: // a*b
-            left *= power_expression();
+            left *= power_expression(ts);
             break;
         case slash: // a/b
         {
-            double temp{power_expression()};
+            double temp{power_expression(ts)};
             if (temp == 0) {
                 error("division by zero");
             }
@@ -137,7 +136,7 @@ double term()
         }
         case percent: // a%b is defined for floats
         {
-            double temp{power_expression()};
+            double temp{power_expression(ts)};
             if (temp == 0) {
                 error("modulo division by zero");
             }
@@ -152,19 +151,19 @@ double term()
 }
 
 // Construct an expression.
-double expression()
+double expression(Token_stream& ts)
 {
-    double left{term()};
+    double left{term(ts)};
     Token t{ts.get()};
 
     while (true) {
         switch (t.kind) {
         case plus: // a+b
-            left += term();
+            left += term(ts);
             t = ts.get();
             break;
         case minus: // a-b
-            left -= term();
+            left -= term(ts);
             t = ts.get();
             break;
         default:
@@ -175,7 +174,7 @@ double expression()
 }
 
 // Declare a variable.
-double declaration()
+double declaration(Token_stream& ts)
 {
     Token t{ts.get()};
     if (t.kind != ident) {
@@ -188,13 +187,13 @@ double declaration()
         error("'=' missing in declaration of ", name);
     }
 
-    double value{expression()};
+    double value{expression(ts)};
     names.declare(name, value);
     return value;
 }
 
 // Deal with assignments.
-double assignment()
+double assignment(Token_stream& ts)
 {
     Token t{ts.get()};
     if (t.kind != ident) {
@@ -202,38 +201,38 @@ double assignment()
     }
     std::string name{t.name};
 
-    Token t2 = ts.get();
+    Token t2{ts.get()};
     if (t2.kind != equals) {
         error("'=' missing in assignment of ", name);
     }
-    double value{expression()};
+    double value{expression(ts)};
     names.set(name, value);
     return value;
 }
 
 // Turn a declaration into a statement.
-double statement()
+double statement(Token_stream& ts)
 {
     Token t{ts.get()};
     switch (t.kind) {
     case let:
-        return declaration();
+        return declaration(ts);
     case set:
-        return assignment();
+        return assignment(ts);
     default:
         ts.putback(t);
-        return expression();
+        return expression(ts);
     }
 }
 
 // Clean up remaining tokens during an exception.
-void clean_up_mess()
+void clean_up_mess(Token_stream& ts)
 {
     ts.ignore(print);
 }
 
 // Compute an expression.
-void calculate()
+void calculate(Token_stream& ts)
 {
     // Get the greatest available precision from a double.
     std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
@@ -250,16 +249,17 @@ void calculate()
                 return;
             }
             ts.putback(t);
-            std::cout << statement() << '\n';
+            std::cout << statement(ts) << '\n';
         }
         catch (std::runtime_error& e) {
             std::cerr << "error: " << e.what() << '\n';
-            clean_up_mess();
+            clean_up_mess(ts);
         }
 }
 
 int main()
 try {
+    Token_stream ts;
     // Predefined constants.
     names.declare("E", 2.71828182845904523536);       // e
     names.declare("LOG2E", 1.44269504088896340736);   // log2(e)
@@ -271,7 +271,7 @@ try {
     names.declare("PI_4", 0.785398163397448309616);   // pi/4
     names.declare("SQRT2", 1.41421356237309504880);   // sqrt(2)
 
-    calculate();
+    calculate(ts);
     return EXIT_SUCCESS;
 }
 catch (std::exception& e) {

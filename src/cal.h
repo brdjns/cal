@@ -14,6 +14,8 @@
 #include <string>
 #include <vector>
 
+#include "token.h"
+
 /// @brief Cast a wider type to a narrower type.
 template<class R, class A>
 R narrow_cast(const A& a)
@@ -26,48 +28,56 @@ R narrow_cast(const A& a)
 
 // @brief Construct an expression.
 // @pre A term.
+// @param ts a stream of tokens.
 // @return An expression.
-double expression();
+double expression(Token_stream& ts);
 
 // @brief Construct a term.
 // @pre A factor.
+// @param ts a stream of tokens.
 // @return A term.
 // @throws std::runtime_error for division by zero.
-double term();
+double term(Token_stream& ts);
 
 // @brief Construct a factor.
 // @pre A token that is a number or parentheses.
+// @param ts a stream of tokens.
 // @return A factor.
 // @throws std::runtime_error if next token is not an expression.
-double factor();
+double factor(Token_stream& ts);
 
 // @brief Construct a power expression.
 // @pre A factor.
+// @param ts a stream of tokens.
 // @return A power expression.
-double power_expression();
+double power_expression(Token_stream& ts);
 
 // @brief Turn a declaration into a statement.
+// @param ts a stream of tokens.
 // @return Either a declaration or a statement.
-double statement();
+double statement(Token_stream& ts);
 
 // @brief Parse declaration statements.
+// @param ts a stream of tokens.
 // @throws std::runtime_error if the variable name is missing in a declaration.
 // @throws std::runtime_error if '=' is missing in a declaration.
 // @return an expression that is the value of the variable.
-double declaration();
+double declaration(Token_stream& ts);
 
 // @brief Compute an expression.
+// @param ts a stream of tokens.
 // @return An expression.
-void calculate();
+void calculate(Token_stream& ts);
 
 // @brief Parse assignment expressions.
-// @param var a variable identifier.
+// @param ts a stream of tokens.
 // @throws std::runtime_error if the variable is undefined.
 // @return the variable's value.
-double assignment();
+double assignment(Token_stream& ts);
 
 // @brief Clean up remaining tokens during an exception.
-void clean_up_mess();
+// @param ts a stream of tokens.
+void clean_up_mess(Token_stream& ts);
 
 // @brief Throw a runtime exception.
 // @param msg an error message.

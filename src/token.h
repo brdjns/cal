@@ -38,6 +38,10 @@ public:
     // @brief Construct a stream of tokens that reads from the standard input.
     Token_stream() : full{false}, buffer{0} {}
 
+    // @brief Construct a stream of tokens that reads from the standard input.
+    // @param[in] is an input stream.
+    Token_stream(std::istream& is) : full{false}, buffer{0} {}
+
     // @brief Fetch a token from the standard input.
     Token get();
 
