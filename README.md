@@ -69,34 +69,47 @@ complex expression nesting.  Expressions can span multiple lines.  An
 expression will not be evaluated until the statement terminator `;` and
 `RET` are typed.
 ```
-> let x = 2.5;              # initialise x with 2.5
+> let x = 2.5;                    # initialise x with 2.5
 2.5
-> set x = 8.3;              # assign 8.3 to x
+
+> set x = 8.3;                    # assign 8.3 to x
 8.3
-> x;                        # print x's value
+
+> x;                              # print x's value
 8.3
-> 2 * (x + x) / 5;          # compute an expression
+
+> 2 * (x + x) / 5;                # compute an expression
+2
 
 > 8 * [45 / {5 - (4 + 2)
-+ 8} + 0.2];                # compute a nested expression
++ 8} + 0.2];                      # compute a nested expression
 53.02857142857143202        
-> -2;                       # unary operators work as expected
+
+> -2;                             # unary operators work as expected
 -2
+
 > +2;
 2
-> |-x|                      # the absolute value of -x
+
+> |-x|                            # the absolute value of -x
 2.5
-> 2 / 0;                    # division by zero is undefined
+
+> 2 / 0;                          # division by zero is undefined
 error: division by zero
+
 > 5 % 0;
 error: modulo division by zero
-> let y = sqrt(x);          # initialise y with the square root of x
+
+> let y = sqrt(x);                # initialise y with the square root of x
 1.581138830084189761
-> 8!;                       # compute the factorial of 8
+
+> 8!;                             # compute the factorial of 8
 40320
-> -8!;                      # can't take negative factorials
+
+> -8!;                            # can't take negative factorials
 error: domain error
-exit                        # quits cal; note: quit is a synonym
+
+exit                              # quits cal; note: quit is a synonym
 ```
 
 ## Building
