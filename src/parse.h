@@ -1,22 +1,21 @@
-// cal.h: Main interface.
+// parse.h: Parser interface.
 // SPDX-FileCopyrightText: © 2021 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 
 #pragma once
 
-#include <cctype>
+#include "token.h"
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
-#include "token.h"
-
-/// @brief Cast a wider type to a narrower type.
+// @brief Cast a wider type to a narrower type.
+// @param a a narrower type
+// @return the value of the narrower type specified
 template<class R, class A>
 R narrow_cast(const A& a)
 {
@@ -78,31 +77,3 @@ double assignment(Token_stream& ts);
 // @brief Clean up remaining tokens during an exception.
 // @param ts a stream of tokens.
 void clean_up_mess(Token_stream& ts);
-
-// @brief Throw a runtime exception.
-// @param msg an error message.
-// @throws std::runtime_error when called.
-inline void error(const std::string& msg)
-{
-    throw std::runtime_error(msg);
-}
-
-// @brief Throw a runtime exception.
-// @param msg an error message.
-// @param msg2 a message to append.
-// @throws std::runtime_error when called.
-inline void error(const std::string& msg, const std::string& msg2)
-{
-    error(msg + msg2);
-}
-
-// @brief Throw a runtime exception.
-// @param msg an error message.
-// @param val a character value.
-// @throws std::runtime_error when called.
-inline void error(const std::string& msg, int val)
-{
-    std::ostringstream os;
-    os << msg << ": " << val;
-    error(os.str());
-}

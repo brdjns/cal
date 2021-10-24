@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "symbol_table.h"
-#include "cal.h"
+#include "error.h"
 
 static Symbol_table names;
 

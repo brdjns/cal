@@ -11,6 +11,8 @@ add_executable(
     cal 
     "src/cal.cc" 
     "src/cal.h" 
+    "src/error.cc"
+    "src/error.h"
     "src/function.cc" 
     "src/function.h"
     "src/symbol_table.cc"

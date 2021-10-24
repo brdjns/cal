@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: MIT
 
 #include "token.h"
-#include "cal.h"
+#include "error.h"
+#include <cctype>
+#include <iostream>
 
 // @brief Fetch a token from the standard input.
 // @pre An ASCII character.

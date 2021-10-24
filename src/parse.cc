@@ -1,8 +1,9 @@
-// cal.cc: cal, a portable desk calculator.
+// parse.cc: cal recursive-descent parser.
 // SPDX-FileCopyrightText: © 2021 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 
-#include "cal.h"
+#include "parse.h"
+#include "error.h"
 #include "function.h"
 #include "symbol_table.h"
 #include "token.h"
@@ -223,12 +224,6 @@ double statement(Token_stream& ts)
         ts.putback(t);
         return expression(ts);
     }
-}
-
-// Clean up remaining tokens during an exception.
-void clean_up_mess(Token_stream& ts)
-{
-    ts.ignore(print);
 }
 
 // Compute an expression.
