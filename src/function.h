@@ -4,8 +4,8 @@
 
 #pragma once
 
-// @brief Compute a factorial.
+// @brief Compute the factorial of num.
 // @pre num is an integer.
-// @post Return a value that is the factorial of num.
+// @return The factorial of num.
 // @param num value to compute factorial of
 double factorial(int num);

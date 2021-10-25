@@ -4,6 +4,7 @@
 
 #include "function.h"
 
+// Compute the factorial of num.
 double factorial(int num)
 {
     if (num == 0) {
