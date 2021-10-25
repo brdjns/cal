@@ -23,7 +23,10 @@ double Symbol_table::get(std::string var)
 void Symbol_table::set(std::string var, double val)
 {
     for (Variable& i : names.var_table) {
-        if (i.name == var) {
+        if (i.name == var && i.is_const == true) {
+            error("cannot assign to a constant");
+        }
+        else if (i.name == var && i.is_const == false) {
             i.value = val;
             return;
         }
@@ -43,11 +46,11 @@ bool Symbol_table::is_declared(std::string var)
 }
 
 // Add a variable to the symbol table.
-double Symbol_table::declare(std::string var, double val)
+double Symbol_table::declare(std::string var, double val, bool is_const)
 {
     if (names.is_declared(var)) {
         error(var, " is defined");
     }
-    names.var_table.push_back(Variable{var, val});
+    names.var_table.push_back(Variable{var, val, is_const});
     return val;
 }

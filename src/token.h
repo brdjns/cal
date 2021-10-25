@@ -91,6 +91,7 @@ enum Symbol {
     // general keywords
     let = 'L',
     set = 'S',
+    readonly = 'C',
     quit = 'Q',
     number = '#',
     ident = '@',
@@ -109,6 +110,7 @@ enum Symbol {
 // Keywords.
 const std::string kw_decl{"let"};
 const std::string kw_assn{"set"};
+const std::string kw_const{"const"};
 const std::string kw_quit{"quit"};
 const std::string kw_exit{"exit"};
 const std::string kw_sqrt{"sqrt"};

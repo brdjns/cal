@@ -175,7 +175,7 @@ double expression(Token_stream& ts)
 }
 
 // Declare a variable.
-double declaration(Token_stream& ts)
+double declaration(Token_stream& ts, bool is_const)
 {
     Token t{ts.get()};
     if (t.kind != ident) {
@@ -189,7 +189,7 @@ double declaration(Token_stream& ts)
     }
 
     double value{expression(ts)};
-    names.declare(name, value);
+    names.declare(name, value, is_const);
     return value;
 }
 
@@ -211,13 +211,15 @@ double assignment(Token_stream& ts)
     return value;
 }
 
-// Turn a declaration into a statement.
+// Deal with statements.
 double statement(Token_stream& ts)
 {
     Token t{ts.get()};
     switch (t.kind) {
     case let:
-        return declaration(ts);
+        return declaration(ts, false);
+    case readonly:
+        return declaration(ts, true);
     case set:
         return assignment(ts);
     default:
@@ -256,15 +258,15 @@ int main()
 try {
     Token_stream ts;
     // Predefined constants.
-    names.declare("E", 2.71828182845904523536);       // e
-    names.declare("LOG2E", 1.44269504088896340736);   // log2(e)
-    names.declare("LOG10E", 0.434294481903251827651); // log10(e)
-    names.declare("LN2", 0.693147180559945309417);    // ln(2)
-    names.declare("LN10", 2.30258509299404568402);    // ln(10)
-    names.declare("PI", 3.14159265358979323846);      // pi
-    names.declare("PI_2", 1.57079632679489661923);    // pi/2
-    names.declare("PI_4", 0.785398163397448309616);   // pi/4
-    names.declare("SQRT2", 1.41421356237309504880);   // sqrt(2)
+    names.declare("E", 2.71828182845904523536, true);       // e
+    names.declare("LOG2E", 1.44269504088896340736, true);   // log2(e)
+    names.declare("LOG10E", 0.434294481903251827651, true); // log10(e)
+    names.declare("LN2", 0.693147180559945309417, true);    // ln(2)
+    names.declare("LN10", 2.30258509299404568402, true);    // ln(10)
+    names.declare("PI", 3.14159265358979323846, true);      // pi
+    names.declare("PI_2", 1.57079632679489661923, true);    // pi/2
+    names.declare("PI_4", 0.785398163397448309616, true);   // pi/4
+    names.declare("SQRT2", 1.41421356237309504880, true);   // sqrt(2)
 
     calculate(ts);
     return EXIT_SUCCESS;

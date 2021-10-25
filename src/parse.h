@@ -58,10 +58,11 @@ double statement(Token_stream& ts);
 
 // @brief Parse declaration statements.
 // @param ts a stream of tokens.
+// @param is_const true if identifier is a constant; false otherwise.
 // @throws std::runtime_error if the variable name is missing in a declaration.
 // @throws std::runtime_error if '=' is missing in a declaration.
-// @return an expression that is the value of the variable.
-double declaration(Token_stream& ts);
+// @return An expression that is the value of the variable.
+double declaration(Token_stream& ts, bool is_const);
 
 // @brief Compute an expression.
 // @param ts a stream of tokens.
@@ -71,7 +72,7 @@ void calculate(Token_stream& ts);
 // @brief Parse assignment expressions.
 // @param ts a stream of tokens.
 // @throws std::runtime_error if the variable is undefined.
-// @return the variable's value.
+// @return The variable's value.
 double assignment(Token_stream& ts);
 
 // @brief Clean up remaining tokens during an exception.

@@ -68,18 +68,16 @@ Token Token_stream::get()
                 str += ch;
             }
             std::cin.putback(ch);
-            if (str == kw_decl) {
+            if (str == kw_decl)
                 return Token{let};
-            }
-            if (str == kw_assn) {
+            if (str == kw_const)
+                return Token{readonly};
+            if (str == kw_assn)
                 return Token{set};
-            }
-            if (str == kw_quit || str == kw_exit) {
+            if (str == kw_quit || str == kw_exit)
                 return Token{quit};
-            }
-            if (str == kw_sqrt) {
+            if (str == kw_sqrt)
                 return Token{sq_rt};
-            }
             return Token{ident, str};
         }
         error("unrecognized token");
