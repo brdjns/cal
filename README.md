@@ -139,10 +139,22 @@ cmake --build build
         | expression "-" term .
 
     declaration =
-          "let" "=" expression
-          "const" "=" expression
-          "set" "=" expression .
+          let-expression
+        | constant-expression
+        | set-expression .
 
+    let-expression =
+          identifier
+        | "let" identifier "=" expression .
+
+    constant-expression =
+          identifier  
+        | "const" identifier "=" expression .
+
+    set-expression =
+          identifier
+        | "set" identifier "=" expression .
+    
     term = 
           power-expression
         | term "*" factor
@@ -162,7 +174,14 @@ cmake --build build
         | "[" expression "]"
         | "{" expression "}"
         | "|" expression "|"
-        | "sqrt" "(" expression ")" .
+        | "sqrt" "(" expression ")"
+        | identifier .
+      
+    identifier = 
+          "a" |..| "z"
+        | "A" |..| "Z"
+        | "_"
+        | digit . 
 
     number =
           floating-point-literal .

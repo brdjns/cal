@@ -256,7 +256,6 @@ void calculate(Token_stream& ts)
 
 int main()
 try {
-    Token_stream ts;
     // Predefined constants.
     names.declare("E", 2.71828182845904523536, true);       // e
     names.declare("LOG2E", 1.44269504088896340736, true);   // log2(e)
@@ -268,6 +267,7 @@ try {
     names.declare("PI_4", 0.785398163397448309616, true);   // pi/4
     names.declare("SQRT2", 1.41421356237309504880, true);   // sqrt(2)
 
+    Token_stream ts;
     calculate(ts);
     return EXIT_SUCCESS;
 }
