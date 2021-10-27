@@ -68,6 +68,6 @@ void calculate(Token_stream& ts)
         }
         catch (std::runtime_error& e) {
             std::cerr << "error: " << e.what() << '\n';
-            clean_up_mess(ts);
+            cleanup(ts);
         }
 }

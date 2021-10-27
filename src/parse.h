@@ -69,7 +69,3 @@ double declaration(Token_stream& ts, bool is_const);
 // @throws std::runtime_error if the variable is undefined.
 // @return The variable's value.
 double assignment(Token_stream& ts);
-
-// @brief Clean up remaining tokens during an exception.
-// @param ts a stream of tokens.
-void clean_up_mess(Token_stream& ts);

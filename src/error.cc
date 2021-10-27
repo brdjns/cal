@@ -36,7 +36,7 @@ void error(const std::string& msg, int val)
 
 // @brief Clean up remaining tokens during an exception.
 // @param ts a stream of tokens.
-void clean_up_mess(Token_stream& ts)
+void cleanup(Token_stream& ts)
 {
     ts.ignore(print);
 }
