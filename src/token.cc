@@ -57,7 +57,7 @@ Token Token_stream::get()
         std::cin >> value;
         return Token{number, value};
     }
-    case eof: // ^Z
+    case eof: // end of file (^Z on MS-Windows, ^D on Unix)
         return Token{quit};
     default: // identifiers
         if (std::isalpha(ch)) {
@@ -74,7 +74,7 @@ Token Token_stream::get()
                 return Token{readonly};
             if (str == kw_assn)
                 return Token{set};
-            if (str == kw_quit || str == kw_exit)
+            if (str == kw_exit)
                 return Token{quit};
             if (str == kw_sqrt)
                 return Token{sq_rt};
