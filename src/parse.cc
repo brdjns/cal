@@ -215,6 +215,7 @@ double assignment(Token_stream& ts)
 double statement(Token_stream& ts)
 {
     Token t{ts.get()};
+    
     switch (t.kind) {
     case let:
         return declaration(ts, false);
