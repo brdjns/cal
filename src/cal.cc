@@ -19,8 +19,8 @@ int main()
 try {
     // Load predefined constants: these are constants in the sense that they
     // cannot be assigned to. These constants are based on the non-standard
-    // macro constants available under <cmath> and <math.h> in many C and C++
-    // implementations.
+    // 'M_*' macro constants available under <cmath> and <math.h> in many C and
+    // C++ implementations.
     names.declare("E", 2.71828182845904523536, true);       // e
     names.declare("LOG2E", 1.44269504088896340736, true);   // log2(e)
     names.declare("LOG10E", 0.434294481903251827651, true); // log10(e)
