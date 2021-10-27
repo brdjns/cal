@@ -68,11 +68,11 @@ Token Token_stream::get()
                 str += ch;
             }
             std::cin.putback(ch);
-            if (str == kw_decl)
+            if (str == kw_let)
                 return Token{let};
             if (str == kw_const)
                 return Token{readonly};
-            if (str == kw_assn)
+            if (str == kw_set)
                 return Token{set};
             if (str == kw_exit)
                 return Token{quit};

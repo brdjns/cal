@@ -108,8 +108,8 @@ enum Symbol {
 };
 
 // Keywords.
-const std::string kw_decl{"let"};
-const std::string kw_assn{"set"};
+const std::string kw_let{"let"};
+const std::string kw_set{"set"};
 const std::string kw_const{"const"};
 const std::string kw_exit{"exit"};
 const std::string kw_sqrt{"sqrt"};
