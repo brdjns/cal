@@ -44,7 +44,6 @@ const       # initialise a constant
 set         # assign to a variable
 sqrt()      # square root
 exit        # exit
-quit        # exit
 ```
 
 ## Predefined constants
@@ -119,7 +118,7 @@ error: cannot assign to a constant
 > set PI = 5.77832;                 # can’t assign to a predefined constant
 error: cannot assign to a constant
 
-exit                                # quits cal; note: ‘quit’ is a synonym
+exit                                # quits cal
 ```
 
 ## Building
