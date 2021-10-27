@@ -9,6 +9,8 @@ project("cal")
 # Add source to this project's executable.
 add_executable(
     cal 
+    "src/cal.cc"
+    "src/cal.h"
     "src/parse.cc" 
     "src/parse.h" 
     "src/error.cc"

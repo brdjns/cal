@@ -64,11 +64,6 @@ double statement(Token_stream& ts);
 // @return An expression that is the value of the variable.
 double declaration(Token_stream& ts, bool is_const);
 
-// @brief Compute an expression.
-// @param ts a stream of tokens.
-// @return An expression.
-void calculate(Token_stream& ts);
-
 // @brief Parse assignment expressions.
 // @param ts a stream of tokens.
 // @throws std::runtime_error if the variable is undefined.

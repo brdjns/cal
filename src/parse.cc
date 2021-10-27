@@ -215,7 +215,7 @@ double assignment(Token_stream& ts)
 double statement(Token_stream& ts)
 {
     Token t{ts.get()};
-    
+
     switch (t.kind) {
     case let:
         return declaration(ts, false);
@@ -227,56 +227,4 @@ double statement(Token_stream& ts)
         ts.putback(t);
         return expression(ts);
     }
-}
-
-// Compute an expression.
-void calculate(Token_stream& ts)
-{
-    // Get the greatest available precision from a double.
-    std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
-
-    const std::string prompt{"> "};
-
-    while (true) try {
-            std::cout << prompt;
-            Token t{ts.get()};
-            while (t.kind == print) { // discard all 'print' tokens
-                t = ts.get();
-            }
-            if (t.kind == quit) {
-                return;
-            }
-            ts.putback(t);
-            std::cout << statement(ts) << '\n';
-        }
-        catch (std::runtime_error& e) {
-            std::cerr << "error: " << e.what() << '\n';
-            clean_up_mess(ts);
-        }
-}
-
-int main()
-try {
-    // Predefined constants.
-    names.declare("E", 2.71828182845904523536, true);       // e
-    names.declare("LOG2E", 1.44269504088896340736, true);   // log2(e)
-    names.declare("LOG10E", 0.434294481903251827651, true); // log10(e)
-    names.declare("LN2", 0.693147180559945309417, true);    // ln(2)
-    names.declare("LN10", 2.30258509299404568402, true);    // ln(10)
-    names.declare("PI", 3.14159265358979323846, true);      // pi
-    names.declare("PI_2", 1.57079632679489661923, true);    // pi/2
-    names.declare("PI_4", 0.785398163397448309616, true);   // pi/4
-    names.declare("SQRT2", 1.41421356237309504880, true);   // sqrt(2)
-
-    Token_stream ts;
-    calculate(ts);
-    return EXIT_SUCCESS;
-}
-catch (std::exception& e) {
-    std::cerr << e.what() << '\n';
-    return EXIT_FAILURE;
-}
-catch (...) {
-    std::cerr << "exception\n";
-    return EXIT_FAILURE;
 }
