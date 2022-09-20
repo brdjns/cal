@@ -8,4 +8,4 @@
 // @pre num is an integer.
 // @return The factorial of num.
 // @param num value to compute factorial of
-double factorial(int num);
+double fn_factorial(int num);

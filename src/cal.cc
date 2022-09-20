@@ -32,7 +32,7 @@ try {
     names.declare("SQRT2", 1.41421356237309504880, true);   // sqrt(2)
 
     Token_stream ts;
-    calculate(ts);
+    compute(ts);
     return EXIT_SUCCESS;
 }
 catch (std::exception& e) {
@@ -45,7 +45,7 @@ catch (...) {
 }
 
 // Compute an expression.
-void calculate(Token_stream& ts)
+void compute(Token_stream& ts)
 {
     // Get the greatest available precision from a double: ordinarily a two-word
     // double holds 10 significant digits.  For cal, we squeeze out 17
@@ -57,10 +57,10 @@ void calculate(Token_stream& ts)
     while (true) try {
             std::cout << prompt;
             Token t{ts.get()};
-            while (t.kind == print_tok) { // discard all 'print' tokens
+            while (t.kind == Symbol::print_tok) { // discard all 'print' tokens
                 t = ts.get();
             }
-            if (t.kind == quit_tok) {
+            if (t.kind == Symbol::quit_tok) {
                 return;
             }
             ts.putback(t);

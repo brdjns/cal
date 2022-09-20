@@ -22,25 +22,25 @@ Token Token_stream::get()
     std::cin >> ch;
 
     switch (ch) {
-    case print_tok:
-    case lparen_tok:
-    case rparen_tok:
-    case lbrace_tok:
-    case rbrace_tok:
-    case lbrack_tok:
-    case rbrack_tok:
-    case bar_tok:
-    case mul_tok:
-    case div_tok:
-    case mod_tok:
-    case plus_tok:
-    case minus_tok:
-    case bang_tok:
-    case equals_tok:
-    case caret_tok:
-    case comma_tok:
+    case Symbol::print_tok:
+    case Symbol::lparen_tok:
+    case Symbol::rparen_tok:
+    case Symbol::lbrace_tok:
+    case Symbol::rbrace_tok:
+    case Symbol::lbrack_tok:
+    case Symbol::rbrack_tok:
+    case Symbol::bar_tok:
+    case Symbol::mul_tok:
+    case Symbol::div_tok:
+    case Symbol::mod_tok:
+    case Symbol::plus_tok:
+    case Symbol::minus_tok:
+    case Symbol::bang_tok:
+    case Symbol::equals_tok:
+    case Symbol::caret_tok:
+    case Symbol::comma_tok:
         return Token{ch};
-    case dot_tok:
+    case Symbol::dot_tok:
     case '0':
     case '1':
     case '2':
@@ -55,10 +55,10 @@ Token Token_stream::get()
         std::cin.unget();
         double value{};
         std::cin >> value;
-        return Token{number_tok, value};
+        return Token{Symbol::number_tok, value};
     }
     case eof_tok: // end of file (^Z on MS-Windows, ^D on Unix)
-        return Token{quit_tok};
+        return Token{Symbol::quit_tok};
     default: // identifiers
         if (std::isalpha(ch)) {
             std::string str;
@@ -69,16 +69,16 @@ Token Token_stream::get()
             }
             std::cin.putback(ch);
             if (str == kw_let)
-                return Token{let_tok};
+                return Token{Symbol::let_tok};
             if (str == kw_const)
-                return Token{const_tok};
+                return Token{Symbol::const_tok};
             if (str == kw_set)
-                return Token{set_tok};
+                return Token{Symbol::set_tok};
             if (str == kw_exit)
-                return Token{quit_tok};
+                return Token{Symbol::quit_tok};
             if (str == kw_sqrt)
-                return Token{sqrt_tok};
-            return Token{ident_tok, str};
+                return Token{Symbol::sqrt_tok};
+            return Token{Symbol::ident_tok, str};
         }
         error("unrecognized token");
     }

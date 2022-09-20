@@ -17,20 +17,20 @@ double factor(Token_stream& ts)
     Token t{ts.get()};
 
     switch (t.kind) {
-    case lparen_tok:
+    case Symbol::lparen_tok:
     {
         double temp{expression(ts)};
         t = ts.get();
-        if (t.kind != rparen_tok) {
+        if (t.kind != Symbol::rparen_tok) {
             error("')' missing in expression");
         }
         return temp;
     }
-    case lbrace_tok:
+    case Symbol::lbrace_tok:
     {
         double temp{expression(ts)};
         t = ts.get();
-        if (t.kind != rbrace_tok) {
+        if (t.kind != Symbol::rbrace_tok) {
             error("'}' missing in expression");
         }
         return temp;
@@ -39,7 +39,7 @@ double factor(Token_stream& ts)
     {
         double temp{expression(ts)};
         t = ts.get();
-        if (t.kind != rbrack_tok) {
+        if (t.kind != Symbol::rbrack_tok) {
             error("']' missing in expression");
         }
         return temp;
@@ -47,7 +47,7 @@ double factor(Token_stream& ts)
     case sqrt_tok: // sqrt(a)
     {
         t = ts.get();
-        if (t.kind != lparen_tok) {
+        if (t.kind != Symbol::lparen_tok) {
             error("'(' missing in expression");
         }
         double temp{expression(ts)};
@@ -55,7 +55,7 @@ double factor(Token_stream& ts)
             error("domain error");
         }
         t = ts.get();
-        if (t.kind != rparen_tok) {
+        if (t.kind != Symbol::rparen_tok) {
             error("')' missing in expression");
         }
         return std::sqrt(temp);
@@ -64,7 +64,7 @@ double factor(Token_stream& ts)
     {
         double temp = expression(ts);
         t = ts.get();
-        if (t.kind != bar_tok) {
+        if (t.kind != Symbol::bar_tok) {
             error("'|' missing in expression");
         }
         return std::abs(temp);
@@ -92,16 +92,16 @@ double power_expression(Token_stream& ts)
 
     while (true) {
         switch (t.kind) {
-        case bang_tok: // a!
+        case Symbol::bang_tok: // a!
         {
             int temp = narrow_cast<int>(left);
             if (temp < 0) {
                 error("domain error");
             }
-            return left = factorial(temp);
+            return left = fn_factorial(temp);
             break;
         }
-        case caret_tok: // a^b
+        case Symbol::caret_tok: // a^b
         {
             double temp{factor(ts)};
             return left = std::pow(left, temp);
@@ -123,7 +123,7 @@ double term(Token_stream& ts)
     while (true) {
         Token t{ts.get()};
         switch (t.kind) {
-        case mul_tok: // a*b
+        case Symbol::mul_tok: // a*b
             left *= power_expression(ts);
             break;
         case div_tok: // a/b
@@ -135,7 +135,7 @@ double term(Token_stream& ts)
             left /= temp;
             break;
         }
-        case mod_tok: // a%b is defined for floats
+        case Symbol::mod_tok: // a%b is defined for floats
         {
             double temp{power_expression(ts)};
             if (temp == 0) {
@@ -159,11 +159,11 @@ double expression(Token_stream& ts)
 
     while (true) {
         switch (t.kind) {
-        case plus_tok: // a+b
+        case Symbol::plus_tok: // a+b
             left += term(ts);
             t = ts.get();
             break;
-        case minus_tok: // a-b
+        case Symbol::minus_tok: // a-b
             left -= term(ts);
             t = ts.get();
             break;
@@ -178,13 +178,13 @@ double expression(Token_stream& ts)
 double declaration(Token_stream& ts, bool is_const)
 {
     Token t{ts.get()};
-    if (t.kind != ident_tok) {
+    if (t.kind != Symbol::ident_tok) {
         error("identifier missing in declaration");
     }
     std::string name{t.name};
 
     Token t2{ts.get()};
-    if (t2.kind != equals_tok) {
+    if (t2.kind != Symbol::equals_tok) {
         error("'=' missing in declaration of ", name);
     }
 
@@ -197,13 +197,13 @@ double declaration(Token_stream& ts, bool is_const)
 double assignment(Token_stream& ts)
 {
     Token t{ts.get()};
-    if (t.kind != ident_tok) {
+    if (t.kind != Symbol::ident_tok) {
         error("identifier missing in assignment");
     }
     std::string name{t.name};
 
     Token t2{ts.get()};
-    if (t2.kind != equals_tok) {
+    if (t2.kind != Symbol::equals_tok) {
         error("'=' missing in assignment of ", name);
     }
     double value{expression(ts)};
@@ -217,11 +217,11 @@ double statement(Token_stream& ts)
     Token t{ts.get()};
 
     switch (t.kind) {
-    case let_tok:
+    case Symbol::let_tok:
         return declaration(ts, false);
-    case const_tok:
+    case Symbol::const_tok:
         return declaration(ts, true);
-    case set_tok:
+    case Symbol::set_tok:
         return assignment(ts);
     default:
         ts.putback(t);

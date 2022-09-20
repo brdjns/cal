@@ -7,4 +7,4 @@
 // @brief Compute an expression.
 // @param ts a stream of tokens.
 // @return An expression.
-void calculate(Token_stream& ts);
+void compute(Token_stream& ts);
