@@ -15,7 +15,7 @@
 
 static Symbol_table names;
 
-int main()
+int main(int argc, char* argv[])
 try {
     // Load predefined constants: these are constants in the sense that they
     // cannot be assigned to. These constants are based on the non-standard
