@@ -54,10 +54,10 @@ void compute(Token_stream& ts)
 
     const std::string prompt{"> "};
 
-    while (true) try {
+    for (;;) try {
             std::cout << prompt;
             Token t{ts.get()};
-            while (t.kind == Symbol::print_tok) { // discard all 'print' tokens
+            for (; t.kind == Symbol::print_tok;) { // discard all 'print' tokens
                 t = ts.get();
             }
             if (t.kind == Symbol::quit_tok) {

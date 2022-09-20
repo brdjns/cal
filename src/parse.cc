@@ -90,7 +90,7 @@ double power_expression(Token_stream& ts)
     double left{factor(ts)};
     Token t{ts.get()};
 
-    while (true) {
+    for (;;) {
         switch (t.kind) {
         case Symbol::bang_tok: // a!
         {
@@ -120,7 +120,7 @@ double term(Token_stream& ts)
 {
     double left{power_expression(ts)};
 
-    while (true) {
+    for (;;) {
         Token t{ts.get()};
         switch (t.kind) {
         case Symbol::mul_tok: // a*b
@@ -157,7 +157,7 @@ double expression(Token_stream& ts)
     double left{term(ts)};
     Token t{ts.get()};
 
-    while (true) {
+    for (;;) {
         switch (t.kind) {
         case Symbol::plus_tok: // a+b
             left += term(ts);

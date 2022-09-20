@@ -94,8 +94,7 @@ void Token_stream::ignore(char c)
         return;
     }
     full = false;
-    char ch{};
-    while (std::cin >> ch) {
+    for (char ch{}; std::cin >> ch;) {
         if (ch == c) {
             return;
         }
