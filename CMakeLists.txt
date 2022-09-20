@@ -1,5 +1,5 @@
 # CMakeLists.txt: Build settings for cal.
-# SPDX-FileCopyrightText: © 2021 Bradley M. Jones <brdjns@gmx.us>
+# SPDX-FileCopyrightText: © 2021-2022 Bradley M. Jones <brdjns@gmx.us>
 # SPDX-License-Identifier: MIT
 
 cmake_minimum_required(VERSION 3.8)

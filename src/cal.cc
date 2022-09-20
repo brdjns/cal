@@ -1,5 +1,5 @@
 // cal.cc: cal, a portable desk calculator.
-// SPDX-FileCopyrightText: © 2021 Bradley M. Jones <brdjns@gmx.us>
+// SPDX-FileCopyrightText: © 2021-2022 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 
 #include "cal.h"
