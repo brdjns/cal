@@ -10,17 +10,11 @@ project("cal")
 add_executable(
     cal 
     "src/cal.cc"
-    "src/cal.h"
     "src/parse.cc" 
-    "src/parse.h" 
     "src/error.cc"
-    "src/error.h"
     "src/function.cc" 
-    "src/function.h"
     "src/symbol_table.cc"
-    "src/symbol_table.h"
     "src/token.cc"
-    "src/token.h"
     )
 
 # TODO: Add tests and install targets if needed.

@@ -65,46 +65,46 @@ private:
 // Recognised scanner symbols.
 enum Symbol {
     // lists
-    comma = ',',
+    comma_tok = ',',
 
     // bracketing
-    lparen = '(',
-    rparen = ')',
-    lbrace = '{',
-    rbrace = '}',
-    lbrack = '[',
-    rbrack = ']',
-    bar = '|',
+    lparen_tok = '(',
+    rparen_tok = ')',
+    lbrace_tok = '{',
+    rbrace_tok = '}',
+    lbrack_tok = '[',
+    rbrack_tok = ']',
+    bar_tok = '|',
 
     // arithmetic operators
-    star = '*',
-    slash = '/',
-    percent = '%',
-    plus = '+',
-    minus = '-',
-    bang = '!',
-    caret = '^',
+    mul_tok = '*',
+    div_tok = '/',
+    mod_tok = '%',
+    plus_tok = '+',
+    minus_tok = '-',
+    bang_tok = '!',
+    caret_tok = '^',
 
     // assignment and initialisation
-    equals = '=',
+    equals_tok = '=',
 
     // general keywords
-    let = 'L',
-    set = 'S',
-    readonly = 'C',
-    quit = 'E',
-    number = '#',
-    ident = '@',
+    let_tok = 'L',
+    set_tok = 'S',
+    const_tok = 'C',
+    quit_tok = 'E',
+    number_tok = '#',
+    ident_tok = '@',
 
     // function operators
-    sq_rt = 'R',
+    sqrt_tok = 'R',
 
     // non-printing
-    eof = '\0',
+    eof_tok = '\0',
 
     // other
-    print = ';',
-    dot = '.',
+    print_tok = ';',
+    dot_tok = '.',
 };
 
 // Keywords.

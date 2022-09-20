@@ -38,5 +38,5 @@ void error(const std::string& msg, int val)
 // @param ts a stream of tokens.
 void cleanup(Token_stream& ts)
 {
-    ts.ignore(print);
+    ts.ignore(print_tok);
 }

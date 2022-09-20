@@ -22,25 +22,25 @@ Token Token_stream::get()
     std::cin >> ch;
 
     switch (ch) {
-    case print:
-    case lparen:
-    case rparen:
-    case lbrace:
-    case rbrace:
-    case lbrack:
-    case rbrack:
-    case bar:
-    case star:
-    case slash:
-    case percent:
-    case plus:
-    case minus:
-    case bang:
-    case equals:
-    case caret:
-    case comma:
+    case print_tok:
+    case lparen_tok:
+    case rparen_tok:
+    case lbrace_tok:
+    case rbrace_tok:
+    case lbrack_tok:
+    case rbrack_tok:
+    case bar_tok:
+    case mul_tok:
+    case div_tok:
+    case mod_tok:
+    case plus_tok:
+    case minus_tok:
+    case bang_tok:
+    case equals_tok:
+    case caret_tok:
+    case comma_tok:
         return Token{ch};
-    case dot:
+    case dot_tok:
     case '0':
     case '1':
     case '2':
@@ -55,10 +55,10 @@ Token Token_stream::get()
         std::cin.unget();
         double value{};
         std::cin >> value;
-        return Token{number, value};
+        return Token{number_tok, value};
     }
-    case eof: // end of file (^Z on MS-Windows, ^D on Unix)
-        return Token{quit};
+    case eof_tok: // end of file (^Z on MS-Windows, ^D on Unix)
+        return Token{quit_tok};
     default: // identifiers
         if (std::isalpha(ch)) {
             std::string str;
@@ -69,16 +69,16 @@ Token Token_stream::get()
             }
             std::cin.putback(ch);
             if (str == kw_let)
-                return Token{let};
+                return Token{let_tok};
             if (str == kw_const)
-                return Token{readonly};
+                return Token{const_tok};
             if (str == kw_set)
-                return Token{set};
+                return Token{set_tok};
             if (str == kw_exit)
-                return Token{quit};
+                return Token{quit_tok};
             if (str == kw_sqrt)
-                return Token{sq_rt};
-            return Token{ident, str};
+                return Token{sqrt_tok};
+            return Token{ident_tok, str};
         }
         error("unrecognized token");
     }

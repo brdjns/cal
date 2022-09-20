@@ -57,10 +57,10 @@ void calculate(Token_stream& ts)
     while (true) try {
             std::cout << prompt;
             Token t{ts.get()};
-            while (t.kind == print) { // discard all 'print' tokens
+            while (t.kind == print_tok) { // discard all 'print' tokens
                 t = ts.get();
             }
-            if (t.kind == quit) {
+            if (t.kind == quit_tok) {
                 return;
             }
             ts.putback(t);
