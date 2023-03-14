@@ -1,10 +1,10 @@
-# Cal
-Cal is a portable, command-line interface, desk calculator.
+# Calc
+Calc is a portable, command-line interface, desk calculator.
 
-Cal supports basic arithmetic using `+`, `-`, `/`, `% ` and `*`.  It also
+Calc supports basic arithmetic using `+`, `-`, `/`, `% ` and `*`.  It also
 supports factorials, with the `!` operator, and exponentiation, with the `^`
-operator.  Cal supports mathematical functions as rvalues, variable assignment,
-and variable and constant declaration.  Internally, Cal uses double-precision
+operator.  Calc supports mathematical functions as rvalues, variable assignment,
+and variable and constant declaration.  Internally, Calc uses double-precision
 floating-point arithmetic for most operations, or integer arithmetic for
 operations that are defined only for integers.
 
@@ -19,7 +19,6 @@ operations that are defined only for integers.
                 {a}
                 [a]
                 a!              factorial
-                |a|             absolute value
 -------------------------------------------------------------------------------
  2              a!              factorial                                right
                 a^b             exponentiation
@@ -35,6 +34,7 @@ operations that are defined only for integers.
 ## Functions
 ```
 sqrt( expression )    # return the square root of expression
+abs( expression )     # return the absolute value of expression
 ```
 
 ## Reserved words
@@ -43,6 +43,7 @@ let         # initialise a variable
 const       # initialise a constant
 set         # assign to a variable
 sqrt()      # square root
+abs()       # absolute value
 exit        # exit
 ```
 
@@ -88,7 +89,7 @@ typical session:
 > +2;
 2
 
-> |-x|                              # the absolute value of -x
+> abs(-x);                          # the absolute value of -x
 2.5
 
 > 2 / 0;                            # division by zero is undefined
@@ -118,7 +119,7 @@ error: cannot assign to a constant
 > set PI = 5.77832;                 # can’t assign to a predefined constant
 error: cannot assign to a constant
 
-exit                                # quits cal
+exit                                # quits calc
 ```
 
 ## Building
@@ -172,8 +173,8 @@ cmake --build build
         | "(" expression ")"
         | "[" expression "]"
         | "{" expression "}"
-        | "|" expression "|"
         | "sqrt" "(" expression ")"
+        | "abs" "(" expression ")"
         | identifier .
       
     identifier = 

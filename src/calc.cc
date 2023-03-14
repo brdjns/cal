@@ -1,8 +1,8 @@
-// cal.cc: cal, a portable desk calculator.
+// calc.cc: calc, a portable desk calculator.
 // SPDX-FileCopyrightText: © 2021-2022 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 
-#include "cal.h"
+#include "calc.h"
 #include "error.h"
 #include "parse.h"
 #include "symbol_table.h"
@@ -48,7 +48,7 @@ catch (...) {
 void compute(Token_stream& ts)
 {
     // Get the greatest available precision from a double: ordinarily a two-word
-    // double holds 10 significant digits.  For cal, we squeeze out 17
+    // double holds 10 significant digits.  For calc, we squeeze out 17
     // significant digits to get the most out of our doubles.
     std::cout.precision(std::numeric_limits<double>::max_digits10 + 2);
 

@@ -1,4 +1,4 @@
-// parse.cc: cal recursive-descent parser.
+// parse.cc: calc recursive-descent parser.
 // SPDX-FileCopyrightText: © 2021-2022 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 
@@ -10,6 +10,13 @@
 
 Symbol_table names;
 double expression(Token_stream& ts);
+
+// Match a token.
+void match(Token t, char c)
+{
+    if (t.kind != c)
+        error("expected ", c);
+}
 
 // Construct a factor.
 double factor(Token_stream& ts)
@@ -47,26 +54,22 @@ double factor(Token_stream& ts)
     case sqrt_tok: // sqrt(a)
     {
         t = ts.get();
-        if (t.kind != Symbol::lparen_tok) {
-            error("'(' missing in expression");
-        }
+        match(t, '(');
         double temp{expression(ts)};
         if (temp < 0) {
             error("domain error");
         }
         t = ts.get();
-        if (t.kind != Symbol::rparen_tok) {
-            error("')' missing in expression");
-        }
+        match(t, ')');
         return std::sqrt(temp);
     }
-    case bar_tok: // |a|
+    case abs_tok: // abs(a)
     {
+        t = ts.get();
+        match(t, '(');
         double temp = expression(ts);
         t = ts.get();
-        if (t.kind != Symbol::bar_tok) {
-            error("'|' missing in expression");
-        }
+        match(t, ')');
         return std::abs(temp);
     }
     case minus_tok: // -a

@@ -1,4 +1,4 @@
-// cal.h: Computation interface.
+// calc.h: Computation interface.
 // SPDX-FileCopyrightText: © 2021-2022 Bradley M. Jones <brdjns@gmx.us>
 // SPDX-License-Identifier: MIT
 

@@ -98,6 +98,7 @@ enum Symbol {
 
     // function operators
     sqrt_tok = 'R',
+    abs_tok = 'A',
 
     // non-printing
     eof_tok = '\0',
@@ -113,3 +114,4 @@ const std::string kw_set{"set"};
 const std::string kw_const{"const"};
 const std::string kw_exit{"exit"};
 const std::string kw_sqrt{"sqrt"};
+const std::string kw_abs{"abs"};

@@ -4,18 +4,15 @@
 
 cmake_minimum_required(VERSION 3.8)
 
-project("cal")
+project("calc")
 
 # Add source to this project's executable.
 add_executable(
-    cal 
-    "src/cal.cc"
+    calc 
+    "src/calc.cc"
     "src/parse.cc" 
     "src/error.cc"
     "src/function.cc" 
     "src/symbol_table.cc"
     "src/token.cc"
     )
-
-# TODO: Add tests and install targets if needed.
-install(TARGETS cal DESTINATION "cal/bin")

@@ -78,6 +78,8 @@ Token Token_stream::get()
                 return Token{Symbol::quit_tok};
             if (str == kw_sqrt)
                 return Token{Symbol::sqrt_tok};
+            if (str == kw_abs)
+                return Token{Symbol::abs_tok};
             return Token{Symbol::ident_tok, str};
         }
         error("unrecognized token");

@@ -23,10 +23,10 @@ double Symbol_table::get(std::string var)
 void Symbol_table::set(std::string var, double val)
 {
     for (Variable& i : names.var_table) {
-        if (i.name == var && i.is_const == true) {
+        if (i.name == var && i.is_const) {
             error("cannot assign to a constant");
         }
-        else if (i.name == var && i.is_const == false) {
+        else if (i.name == var && (!i.is_const)) {
             i.value = val;
             return;
         }
