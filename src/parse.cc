@@ -28,27 +28,21 @@ double factor(Token_stream& ts)
     {
         double temp{expression(ts)};
         t = ts.get();
-        if (t.kind != Symbol::rparen_tok) {
-            error("')' missing in expression");
-        }
+        match(t, ')');
         return temp;
     }
     case Symbol::lbrace_tok:
     {
         double temp{expression(ts)};
         t = ts.get();
-        if (t.kind != Symbol::rbrace_tok) {
-            error("'}' missing in expression");
-        }
+          match(t, '}');
         return temp;
     }
     case lbrack_tok:
     {
         double temp{expression(ts)};
         t = ts.get();
-        if (t.kind != Symbol::rbrack_tok) {
-            error("']' missing in expression");
-        }
+        match(t, ']');
         return temp;
     }
     case sqrt_tok: // sqrt(a)
