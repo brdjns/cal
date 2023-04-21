@@ -11,8 +11,8 @@
 // @details Represents a token that has a kind and a value.
 class Token {
 public:
-    char kind;        // a token kind
-    double value;     // a token value
+    char kind{};      // a token kind
+    double value{};   // a token value
     std::string name; // an identifier name
 
     // @brief Construct a token from a character.
